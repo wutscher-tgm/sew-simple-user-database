@@ -1,0 +1,7 @@
+.idea
+.tox
+.coverage
+docs
+testreport.html
+__pycache__
+*egg-info
