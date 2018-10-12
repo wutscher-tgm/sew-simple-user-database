@@ -6,18 +6,31 @@ app = Flask(__name__)
 api = Api(app)
 
 
+class DB:
+
+    def __init__(self, location):
+        self.__db = ""
+        self.__location = location
+        self.load()
+
+    def get(self):
+        return self.__db
+
+    def load(self):
+        file = open(self.__location, "r")
+        for line in file:
+            self.__db += line.rstrip('\n')
+        self.__db = json.loads(self.__db)
+
+    def addEntry(self, entry):
+        self.__db += entry
+        self.save(self.__db)
+
+    def save(self, db):
+        file = open(self.__location, "w")
+        file.write(json.dumps(db))
 
 class Schueler(Resource):
-    def load_db(self, location):
-        file = open(location, "r")
-        database = ""
-        for line in file:
-            database += line.rstrip('\n')
-        return json.loads(database)
-
-    def save_db(self, db, location):
-        file = open(location, "w")
-        file.write(json.dumps(db))
 
     def get(self):
         parser = reqparse.RequestParser()
@@ -29,11 +42,11 @@ class Schueler(Resource):
         #email = parser.parse_args().email
         if(email == None or username == None):
             return "arguments invalid"
-        database = self.load_db("db.json")
-        database += [{"email":email,"username":username}]
-        self.save_db(database, "db.json")
+        db = DB("db.json")
+        db.addEntry([{"email":email,"username":username}])
 
-        return database
+        return db.get()
+
 api.add_resource(Schueler, '/students')
 
 if __name__ == '__main__':
