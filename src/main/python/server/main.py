@@ -34,8 +34,11 @@ class DB:
         self.__db = json.loads(self.__db)
 
     def addEntry(self, entry):
+        if self.get(email=entry[0]['email']) != None:
+            return "email already exists"
         self.__db += entry
         self.save(self.__db)
+        return "successful"
 
     def save(self, db):
         file = open(self.__location, "w")
@@ -57,8 +60,7 @@ class Schueler(Resource):
         #email = parser.parse_args().email
         if(email == None or username == None):
             return "arguments invalid"
-        self.__db.addEntry([{"email": email, "username": username}])
-        return 1
+        return self.__db.addEntry([{"email": email, "username": username}])
 
     def get(self):
         parser = reqparse.RequestParser()
