@@ -20,6 +20,26 @@ class DB:
         self.__location = location
         self.load()
 
+    def load(self):
+        file = open(self.__location, "r")
+        for line in file:
+            self.__db += line.rstrip('\n')
+
+        if self.__db == '':
+            self.__db = '[]'
+        self.__db = json.loads(self.__db)
+
+    def save(self, db):
+        file = open(self.__location, "w")
+        file.write(json.dumps(db))
+
+    def addEntry(self, entry):
+        if self.get(email=entry[0]['email']) != null:
+            return "email already exists"
+        self.__db += entry
+        self.save(self.__db)
+        return "successful"
+
     def get(self, email=null, username=null):
         if email != null:
             for element in self.__db:
@@ -34,25 +54,18 @@ class DB:
         else:
             return self.__db
 
-    def load(self):
-        file = open(self.__location, "r")
-        for line in file:
-            self.__db += line.rstrip('\n')
+    def update(self, email, username:null, picture:null):
+        if email != null:
+            for element in self.__db:
+                if element['email'] == email:
+                    if username != null:
+                        element['username'] = username
+                    if picture != null:
+                        element['picture'] = picture
 
-        if self.__db == '':
-            self.__db = '[]'
-        self.__db = json.loads(self.__db)
-
-    def addEntry(self, entry):
-        if self.get(email=entry[0]['email']) != null:
-            return "email already exists"
-        self.__db += entry
-        self.save(self.__db)
-        return "successful"
-
-    def save(self, db):
-        file = open(self.__location, "w")
-        file.write(json.dumps(db))
+    def delete(self, email):
+        entry = self.get(email=email)
+        self.__db.remove(entry)
 
 class Schueler(Resource):
 
@@ -61,22 +74,43 @@ class Schueler(Resource):
 
 
     def put(self):
+        # Getting arguments from request
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str, location='args')
         parser.add_argument('username', type=str, location='args')
-        parser.add_argument('picture', type=werkzeug.datastructures.FileStorage, location='files')
-        picture = parser.parse_args().picture
+        parser.add_argument('picture', type=str, location='args')
+        parser.add_argument('pictureLink', type=werkzeug.datastructures.FileStorage, location='files')
+
+        # Loading arguments into easily usable variables
+        pictureB64 = parser.parse_args().picture
+        pictureLink = parser.parse_args().pictureLink
         username = parser.parse_args().username
         email = parser.parse_args().email
-        picture = base64.b64encode(picture.read())
-        
+        picture = null
+
+        # Checking if arguments are valid
+        if email == null:
+            return 'argument "email" is missing'
+        elif username == null:
+            return 'argument "username" is missing'
+        elif (pictureB64 != null) and (pictureLink != null):
+            return 'too many arguments provided, can only use one picture source'
+
+        if pictureB64 != null:
+            picture = (base64.b64encode(pictureB64.read())).decode("utf-8")
+        elif pictureLink != null:
+            pass
+
+
+
+
         if(email == null or username == null):
             return "arguments invalid"
         return self.__db.addEntry(
             [
                 {"email": email,
                  "username": username,
-                 "picture": picture.decode("utf-8")
+                 "picture": picture
                  }
             ]
         )
