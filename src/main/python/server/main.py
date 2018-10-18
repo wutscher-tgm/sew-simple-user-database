@@ -1,4 +1,6 @@
 import base64
+import urllib
+
 
 import werkzeug
 from flask import Flask
@@ -78,8 +80,8 @@ class Schueler(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str, location='args')
         parser.add_argument('username', type=str, location='args')
-        parser.add_argument('picture', type=str, location='args')
-        parser.add_argument('pictureLink', type=werkzeug.datastructures.FileStorage, location='files')
+        parser.add_argument('pictureLink', type=str, location='args')
+        parser.add_argument('picture', type=werkzeug.datastructures.FileStorage, location='files')
 
         # Loading arguments into easily usable variables
         pictureB64 = parser.parse_args().picture
@@ -96,11 +98,11 @@ class Schueler(Resource):
         elif (pictureB64 != null) and (pictureLink != null):
             return 'too many arguments provided, can only use one picture source'
 
+        print(pictureLink)
         if pictureB64 != null:
             picture = (base64.b64encode(pictureB64.read())).decode("utf-8")
         elif pictureLink != null:
-            pass
-
+            picture = (base64.b64encode((urllib.request.urlopen(pictureLink)).read())).decode("utf-8")
 
 
 
