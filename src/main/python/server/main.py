@@ -160,11 +160,14 @@ class Schueler(Resource):
 
         if (email == null or username == null):
             return "arguments invalid"
-        
+
         return self.__db.update(email, username= username, picture =picture)
 
     def delete(self):
-        pass
+        parser = reqparse.RequestParser()
+        parser.add_argument('email', type=str, location='args')
+        email = parser.parse_args().email
+        self.__db.delete(email)
 
 api.add_resource(Schueler, '/students')
 
