@@ -1,17 +1,16 @@
 import pytest
-from server.main import create_app
+import server.main
 from flask import url_for
-import flask.Flask.test_client
+from flask import Flask
 
 
 @pytest.fixture
-def app():
-    app = create_app()
-    app.debug = True
-    return app
+def client():
+    server.main.app.testing = True
+    client = server.main.app.test_client()
+    yield client
 
 
 def test_ping(client):
-    res = client.get(url_for('ping'))
+    res = client.get('/students')
     assert res.status_code == 200
-    assert res.json == {'ping': 'pong'}

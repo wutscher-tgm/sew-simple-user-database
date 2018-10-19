@@ -11,7 +11,7 @@ false = False
 null = None
 
 
-app = Flask(__name__)
+app = Flask('SimpleUserDatabase')
 api = Api(app)
 
 
