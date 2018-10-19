@@ -3,4 +3,7 @@ pytest-cov
 pytest-html
 flask
 flask-restful
-json
+Werkzeug
+pytest-flask
+requests
+flask.Flask.test_client

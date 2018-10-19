@@ -171,5 +171,9 @@ class Schueler(Resource):
 
 api.add_resource(Schueler, '/students')
 
+def create_app():
+    app.run(debug=true)
+    pass
+
 if __name__ == '__main__':
     app.run(debug=true)
