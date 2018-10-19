@@ -132,7 +132,36 @@ class Schueler(Resource):
             return self.__db.get()
 
     def patch(self):
-        pass
+        # Getting arguments from request
+        parser = reqparse.RequestParser()
+        parser.add_argument('email', type=str, location='args')
+        parser.add_argument('username', type=str, location='args')
+        parser.add_argument('pictureLink', type=str, location='args')
+        parser.add_argument('picture', type=werkzeug.datastructures.FileStorage, location='files')
+
+        # Loading arguments into easily usable variables
+        pictureB64 = parser.parse_args().picture
+        pictureLink = parser.parse_args().pictureLink
+        username = parser.parse_args().username
+        email = parser.parse_args().email
+        picture = null
+
+        # Checking if arguments are valid
+        if email == null:
+            return 'argument "email" is missing'
+        elif (pictureB64 != null) and (pictureLink != null):
+            return 'too many arguments provided, can only use one picture source'
+
+        print(pictureLink)
+        if pictureB64 != null:
+            picture = (base64.b64encode(pictureB64.read())).decode("utf-8")
+        elif pictureLink != null:
+            picture = (base64.b64encode((urllib.request.urlopen(pictureLink)).read())).decode("utf-8")
+
+        if (email == null or username == null):
+            return "arguments invalid"
+        
+        return self.__db.update(email, username= username, picture =picture)
 
     def delete(self):
         pass
