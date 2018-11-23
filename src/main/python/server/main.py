@@ -83,6 +83,8 @@ class Schueler(Resource):
         parser.add_argument('pictureLink', type=str, location='args')
         parser.add_argument('picture', type=werkzeug.datastructures.FileStorage, location='files')
 
+        print('arg: '+str(parser.parse_args().picture))
+
         # Loading arguments into easily usable variables
         pictureB64 = parser.parse_args().picture
         pictureLink = parser.parse_args().pictureLink

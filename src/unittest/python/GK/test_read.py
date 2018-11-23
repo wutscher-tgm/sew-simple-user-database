@@ -36,22 +36,22 @@ def test_get_all(client):
         {'email': 'rwutscher@student.tgm.ac.at', 'username': 'rwutscher', 'picture': None},
         {'email': 'ntesanovic@student.tgm.ac.at', 'username': 'ntesanovic', 'picture': None}
     ]
-
+"""
 def test_get_one_by_email_with_picture_link(client):
-    res = client.put('/students?email=rwutscher@student.tgm.ac.at&username=rwutscher&pictureLink=https://avatars2.githubusercontent.com/u/25224756?s=460&v=4')
-    assert res.json == "successful"
-    res = client.get('/students?email=rwutscher@student.tgm.ac.at')
-    assert res.json == {'email': 'rwutscher@student.tgm.ac.at', 'username': 'rwutscher', 'picture': None}
-
-def test_get_one_by_email_with_picture(client):
-    with open('pp.jpg', 'rb') as f:
-        res = client.put('/students?email=rwutscher@student.tgm.ac.at&username=rwutscher',data={
-            "picture": base64.encodebytes(f.read())
-        })
+    with open('25224756.jpg', 'rb') as f:
+        res = client.put('/students?email=rwutscher@student.tgm.ac.at&username=rwutscher&pictureLink=https://avatars2.githubusercontent.com/u/25224756?s=460&v=4')
         assert res.json == "successful"
         res = client.get('/students?email=rwutscher@student.tgm.ac.at')
         assert res.json == {'email': 'rwutscher@student.tgm.ac.at', 'username': 'rwutscher', 'picture': base64.encodebytes(f.read())}
-
+"""
+def test_get_one_by_email_with_picture(client):
+    with open('pp.jpg', 'rb') as f:
+        res = client.put('/students?email=rwutscher@student.tgm.ac.at&username=rwutscher',data={
+            "picture": (f.read(),'')#base64.encodebytes(f.read())
+        },content_type='application/x-www-form-urlencoded')
+        assert res.json == "successful"
+        res = client.get('/students?email=rwutscher@student.tgm.ac.at')
+        assert res.json == {'email': 'rwutscher@student.tgm.ac.at', 'username': 'rwutscher', 'picture': base64.encodebytes(f.read())}
 """
 def test_get_one_by_username(client):
     client.put('/students?email=rwutscher@student.tgm.ac.at&username=rwutscher')
