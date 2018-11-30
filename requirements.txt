@@ -6,3 +6,4 @@ flask-restful
 Werkzeug
 pytest-flask
 requests
+flask_cors
