@@ -17,22 +17,22 @@ def client():
 
 
 def test_create(client):
-    res = client.put('/students?email=rwutscher@student.tgm.ac.at&username=rwutscher')
+    res = client.post('/students?email=rwutscher@student.tgm.ac.at&username=rwutscher')
     assert res.json == "successful"
 
 def test_create_duplicate(client):
-    res = client.put('/students?email=ntesanovic@student.tgm.ac.at&username=ntesanovic')
+    res = client.post('/students?email=ntesanovic@student.tgm.ac.at&username=ntesanovic')
     assert res.json == "successful"
-    res = client.put('/students?email=ntesanovic@student.tgm.ac.at&username=ntesanovic')
+    res = client.post('/students?email=ntesanovic@student.tgm.ac.at&username=ntesanovic')
     assert res.json == "email already exists"
 
 def test_create_with_picture_link(client):
-    res = client.put('/students?email=rwutscher@student.tgm.ac.at&username=rwutscher&pictureLink=https://avatars2.githubusercontent.com/u/25224756?s=460&v=4')
+    res = client.post('/students?email=rwutscher@student.tgm.ac.at&username=rwutscher&pictureLink=https://avatars2.githubusercontent.com/u/25224756?s=460&v=4')
     assert res.json == "successful"
 
 def test_create_with_picture(client):
     with open('pp.jpg', 'rb') as f:
-        res = client.put('/students?email=rwutscher@student.tgm.ac.at&username=rwutscher',data={
+        res = client.post('/students?email=rwutscher@student.tgm.ac.at&username=rwutscher',data={
             "picture": base64.encodebytes(f.read())
         })
         assert res.json == "successful"

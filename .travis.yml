@@ -1,0 +1,11 @@
+matrix:
+  include:
+     - stage: Tox
+       language: 'python'
+       script: tox
+     - stage: Vue
+       language: 'node_js'
+       install:
+         - cd src/main/vue
+         - npm ci
+       script: npm test

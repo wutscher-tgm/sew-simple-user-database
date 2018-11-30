@@ -4,6 +4,7 @@ import urllib
 
 import werkzeug
 from flask import Flask
+from flask_cors import CORS
 from flask_restful import Resource, Api, reqparse
 import json
 true = True
@@ -13,7 +14,7 @@ null = None
 
 app = Flask('SimpleUserDatabase')
 api = Api(app)
-
+CORS(app)
 
 class DB:
 
@@ -75,15 +76,13 @@ class Schueler(Resource):
         self.__db = DB("db.json")
 
 
-    def put(self):
+    def post(self):
         # Getting arguments from request
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str, location='args')
         parser.add_argument('username', type=str, location='args')
         parser.add_argument('pictureLink', type=str, location='args')
         parser.add_argument('picture', type=werkzeug.datastructures.FileStorage, location='files')
-
-        print('arg: '+str(parser.parse_args().picture))
 
         # Loading arguments into easily usable variables
         pictureB64 = parser.parse_args().picture
