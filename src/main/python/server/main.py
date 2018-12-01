@@ -1,20 +1,26 @@
 import base64
 import urllib
-
+import sys
 
 import werkzeug
 from flask import Flask
-from flask_cors import CORS
 from flask_restful import Resource, Api, reqparse
 import json
 true = True
 false = False
 null = None
 
+use_cors = false
+for i in range(len(sys.argv)):
+    if 'cors=' in sys.argv[i]:
+        if 'true' in sys.argv[i]:
+            use_cors = true;
 
 app = Flask('SimpleUserDatabase')
 api = Api(app)
-CORS(app)
+if (use_cors):
+    from flask_cors import CORS
+    CORS(app)
 
 class DB:
 

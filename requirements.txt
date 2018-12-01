@@ -3,7 +3,6 @@ pytest-cov
 pytest-html
 flask
 flask-restful
+flask-cors
 Werkzeug
 pytest-flask
-requests
-flask_cors
