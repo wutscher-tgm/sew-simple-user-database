@@ -1,12 +1,14 @@
 matrix:
   include:
-     - stage: Tox
-       language: 'python'
-       install: pip install tox-travis
-       script: tox
-     - stage: Vue
-       language: 'node_js'
-       install:
-         - cd src/main/vue
-         - npm ci
-       script: npm test
+  - stage: Tox
+    language: 'python'
+    python:
+    - "3.6"
+    install: pip install tox-travis
+    script: tox
+  - stage: Vue
+    language: 'node_js'
+    install:
+    - cd src/main/vue
+    - npm ci
+    script: npm test
