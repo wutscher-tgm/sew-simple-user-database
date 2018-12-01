@@ -69,10 +69,12 @@ class DB:
                         element['username'] = username
                     if picture != null:
                         element['picture'] = picture
+        self.save(self.__db)
 
     def delete(self, email):
         entry = self.get(email=email)
         self.__db.remove(entry)
+        self.save(self.__db)
 
 
 class Schueler(Resource):

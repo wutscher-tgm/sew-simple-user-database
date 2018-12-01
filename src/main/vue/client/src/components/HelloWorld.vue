@@ -42,8 +42,8 @@
           <td>{{ student.username }}</td>
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
-              <button type="button" class="btn btn-primary">Edit</button>
-              <button type="button" class="btn btn-danger">Delete</button>
+              <button type="button" class="btn btn-warning">Edit</button>
+              <button type="button" class="btn btn-danger" v-on:click="deleteStudent(student.email)">Delete</button>
             </div>
           </td>
         </tr>
@@ -99,6 +99,15 @@ export default {
     updatePreviewImage: function(){
       var imagefile = document.querySelector('#addStudentFile');
       this.url = URL.createObjectURL(imagefile.files[0]);
+    },
+    deleteStudent: function(email) {
+      const path = `http://localhost:5000/students?email=${email}`;
+      axios.delete(path).then((res) => {
+        console.log(res);
+        this.getStudents();
+      }).catch((error) => {
+        console.error(error);
+      });
     }
   },
   created(){
