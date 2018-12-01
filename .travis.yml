@@ -9,6 +9,6 @@ matrix:
   - stage: Vue
     language: 'node_js'
     install:
-    - cd src/main/vue
+    - cd src/main/vue/client
     - npm ci
     script: npm test
