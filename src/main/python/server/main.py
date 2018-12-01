@@ -6,24 +6,22 @@ import werkzeug
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
 import json
+
 true = True
 false = False
 null = None
 
-use_cors = false
+app = Flask('SimpleUserDatabase')
+api = Api(app)
+
 for i in range(len(sys.argv)):
     if 'cors=' in sys.argv[i]:
         if 'true' in sys.argv[i]:
-            use_cors = true;
+            from flask_cors import CORS
+            CORS(app)
 
-app = Flask('SimpleUserDatabase')
-api = Api(app)
-if (use_cors):
-    from flask_cors import CORS
-    CORS(app)
 
 class DB:
-
     def __init__(self, location):
         self.__db = ''
         self.__location = location
@@ -63,7 +61,7 @@ class DB:
         else:
             return self.__db
 
-    def update(self, email, username:null, picture:null):
+    def update(self, email, username: null, picture: null):
         if email != null:
             for element in self.__db:
                 if element['email'] == email:
@@ -76,11 +74,11 @@ class DB:
         entry = self.get(email=email)
         self.__db.remove(entry)
 
+
 class Schueler(Resource):
 
     def __init__(self):
         self.__db = DB("db.json")
-
 
     def post(self):
         # Getting arguments from request
@@ -111,9 +109,7 @@ class Schueler(Resource):
         elif pictureLink != null:
             picture = (base64.b64encode((urllib.request.urlopen(pictureLink)).read())).decode("utf-8")
 
-
-
-        if(email == null or username == null):
+        if (email == null or username == null):
             return "arguments invalid"
         return self.__db.addEntry(
             [
@@ -168,7 +164,7 @@ class Schueler(Resource):
         if (email == null or username == null):
             return "arguments invalid"
 
-        return self.__db.update(email, username= username, picture =picture)
+        return self.__db.update(email, username=username, picture=picture)
 
     def delete(self):
         parser = reqparse.RequestParser()
@@ -176,11 +172,9 @@ class Schueler(Resource):
         email = parser.parse_args().email
         self.__db.delete(email)
 
+
 api.add_resource(Schueler, '/students')
 
-def create_app():
-    app.run(debug=true)
-    pass
 
 if __name__ == '__main__':
     app.run(debug=true)
