@@ -4,10 +4,6 @@ matrix:
     language: 'python'
     python:
     - "3.6"
-    os:
-      - linux
-      - windows
-      - osx
     install: pip install tox-travis
     script: tox
   - stage: Vue

@@ -103,11 +103,13 @@ class Schueler(Resource):
         elif (pictureB64 != null) and (pictureLink != null):
             return 'too many arguments provided, can only use one picture source'
 
-        print(pictureLink)
         if pictureB64 != null:
             picture = (base64.b64encode(pictureB64.read())).decode("utf-8")
         elif pictureLink != null:
             picture = (base64.b64encode((urllib.request.urlopen(pictureLink)).read())).decode("utf-8")
+
+        print("picture: ")
+        print(picture)
 
         if (email == null or username == null):
             return "arguments invalid"
