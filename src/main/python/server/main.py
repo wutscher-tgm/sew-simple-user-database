@@ -1,6 +1,7 @@
 import base64
 import urllib
 import sys
+import os
 
 import werkzeug
 from flask import Flask
@@ -28,7 +29,10 @@ class DB:
         self.load()
 
     def load(self):
-        file = open(self.__location, "r")
+        if not os.path.isfile(self.__location):
+            with open(self.__location, "w+"):
+                print("new file created")
+        file = open(self.__location, "r+")
         for line in file:
             self.__db += line.rstrip('\n')
 

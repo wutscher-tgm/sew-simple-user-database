@@ -11,4 +11,13 @@ matrix:
     install:
     - cd src/main/vue/client
     - npm ci
+
+
+
+
+
+
+
+
+
     script: npm test
