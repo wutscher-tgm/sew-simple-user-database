@@ -3,7 +3,7 @@
 ## Aufgabenstellung
 Die detaillierte [Aufgabenstellung](TASK.md) beschreibt die notwendigen Schritte zur Realisierung.
 
-![vueJS client](vue.jpg)
+![vueJS client](vue.png)
 ## Server
 
 ### Deployment
