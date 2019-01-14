@@ -9,14 +9,21 @@
     "cy:run": "cypress run",
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "cypress-and-cleanup": "npm run cy:run && rm db.json",
+    "node-server": "npm run dev&",
+    "test2": "start-test node-server http://localhost:8080/ cypress-and-cleanup",
+    "test": "start-test server http://localhost:5000/students test2",
+    "server": "python ..\\..\\python\\server\\main.py"
   },
   "dependencies": {
     "animate.css": "^3.7.0",
     "axios": "^0.18.0",
     "bootstrap": "^4.1.3",
     "bootstrap-vue": "^2.0.0-rc.11",
+    "chance": "^1.0.17",
     "jquery": "^3.3.1",
+    "start-server-and-test": "^1.7.11",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
