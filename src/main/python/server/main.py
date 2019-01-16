@@ -15,11 +15,8 @@ null = None
 app = Flask('SimpleUserDatabase')
 api = Api(app)
 
-for i in range(len(sys.argv)):
-    if 'cors=' in sys.argv[i]:
-        if 'true' in sys.argv[i]:
-            from flask_cors import CORS
-            CORS(app)
+from flask_cors import CORS
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 class DB:

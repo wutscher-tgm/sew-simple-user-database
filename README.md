@@ -6,13 +6,20 @@ Die detaillierte [Aufgabenstellung](TASK.md) beschreibt die notwendigen Schritte
 ![vueJS client](vue.png)
 ## Server
 
+### Requirements
++ [Python 3.6^](https://www.python.org/)
++ [Tox](https://tox.readthedocs.io/en/latest/)
++ [pytest](https://docs.pytest.org/en/latest/)
++ [PyTestFlask](https://pytest-flask.readthedocs.io/en/latest/)
++ [Flask](https://flask-restful.readthedocs.io/en/latest/)
+
 ### Deployment
 Um den Server zu starten muss der folgende Befehl verwendet werden:
 ```
 python src\main\python\server\main.py
 ```
 
-### Usage
+### Verwendung
 
 Um die CRUD funktionen zu verwenden müssen `/students` Requests mit den 
 entsprechenden HTTP Funktionen getätigt werden. 
@@ -56,10 +63,39 @@ Es kann entweder ein pictureLink oder ein picture Parameter pro Request verwende
 |---|---|---|
 |email|Die Email-Addresse des Benutzers der gelöscht werden soll|Ja|
 ### Testing
-
+Um die python tests auszuführen muss der `tox` Befehl in einer Kommandozeile
+ausgeführt werden.
 
 ## Vue Client
 
+### Installation
+Um einen Testserver zu starten:
+```
+cd src/main/vue/client
+npm install
+npm run dev
+```
+Um Files zur Verwendung für Webserver zu generieren:
+```
+cd src/main/vue/client
+npm install
+npm run build
+```
+
+
+
 ## JavaFX Client
+> IN DEVELOPMENT
 
 ## Quellen
+
++ [VueCLI](https://cli.vuejs.org/)
++ [VueJS](https://vuejs.org/)
++ [Python](https://www.python.org/)
++ [pytest](https://docs.pytest.org/en/latest/)
++ [PyTestFlask](https://pytest-flask.readthedocs.io/en/latest/)
++ [Flask](https://flask-restful.readthedocs.io/en/latest/)
++ [Cypress](https://docs.cypress.io/guides/overview/why-cypress.html)
++ [Axios](https://github.com/axios/axios)
++ [tox](https://tox.readthedocs.io/en/latest/)
++ [TravisCI](https://docs.travis-ci.com/)
