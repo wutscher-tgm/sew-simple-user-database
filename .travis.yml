@@ -8,10 +8,9 @@ matrix:
     script: tox
   - stage: Vue
     language: 'node_js'
-    install:
+    before_install:
     - cd src/main/vue/client
-    - npm install
-    before_script:
+    script:
+    - npm test
     - python ..\\..\\python\\server\\main.py &
     - npm run dev &
-    script: npm test
