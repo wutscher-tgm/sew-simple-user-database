@@ -3,7 +3,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import com.jfoenix.controls.*;
 public class Controller extends Application {
 
     public static void main(String[] args) {
@@ -17,7 +17,7 @@ public class Controller extends Application {
 
             Scene scene = new Scene(root, 900, 600);
 
-            stage.setTitle("Database Explorer");
+            stage.setTitle("Simple User Database");
             stage.setScene(scene);
             stage.show();
         }catch(Exception e){

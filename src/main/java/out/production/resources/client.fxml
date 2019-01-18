@@ -1,49 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <BorderPane layoutX="72.0" layoutY="109.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <center>
-           <StackPane fx:id="root" xmlns="http://javafx.com/javafx/2.2" xmlns:fx="http://javafx.com/fxml/1">
-              <children>
-                <VBox maxHeight="600" maxWidth="600" spacing="10">
-                  <children>
-
-                    <HBox alignment="CENTER">
-      <children>
-                              <JFXButton text="Button" />
-                         <Label styleClass="title-label">Editable Tree Table View</Label>
-                         <Label fx:id="editableTreeTableViewCount" styleClass="title-label" />
-                         <StackPane HBox.hgrow="ALWAYS">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="DBController">
+    <children>
+        <BorderPane layoutX="72.0" layoutY="109.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0"
+                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <center>
+                <StackPane fx:id="root" xmlns="http://javafx.com/javafx/2.2" xmlns:fx="http://javafx.com/fxml/1">
+                    <children>
+                        <VBox maxHeight="600" maxWidth="600" spacing="10">
                             <children>
-                              <StackPane maxWidth="200" StackPane.alignment="CENTER_RIGHT">
-                                 <children>
-                                   <JFXTextField fx:id="searchField2" promptText="Search..." />
-                                 </children>
-                              </StackPane>
+
+                                <HBox alignment="CENTER">
+                                    <children>
+                                        <JFXButton fx:id="testButton" onAction="#test" text="Load Users"/>
+                                        <Label styleClass="title-label">Editable Tree Table View</Label>
+                                        <Label fx:id="editableTreeTableViewCount" styleClass="title-label"/>
+                                        <StackPane HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <StackPane maxWidth="200" StackPane.alignment="CENTER_RIGHT">
+                                                    <children>
+                                                        <JFXTextField fx:id="searchField2" promptText="Search..."/>
+                                                    </children>
+                                                </StackPane>
+                                            </children>
+                                        </StackPane>
+                                    </children>
+                                </HBox>
+                                <JFXTreeTableView fx:id="editableTreeTableView">
+                                    <columns>
+                                        <JFXTreeTableColumn fx:id="pictureColumn" minWidth="133"
+                                                            resizable="false" text="Picture"/>
+                                        <JFXTreeTableColumn fx:id="usernameColumn" minWidth="133"
+                                                            resizable="false" text="Username"/>
+                                        <JFXTreeTableColumn fx:id="emailColumn" minWidth="133"
+                                                            resizable="false" text="Email"/>
+                                    </columns>
+                                </JFXTreeTableView>
                             </children>
-                         </StackPane>
-      </children>
-                    </HBox>
-                    <JFXTreeTableView fx:id="editableTreeTableView">
-                      <columns>
-                        <JFXTreeTableColumn fx:id="firstNameEditableColumn" minWidth="133" resizable="false" text="First Name" />
-                        <JFXTreeTableColumn fx:id="lastNameEditableColumn" minWidth="133" resizable="false" text="Last Name" />
-                        <JFXTreeTableColumn fx:id="ageEditableColumn" minWidth="133" resizable="false" text="Age" />
-                      </columns>
-                    </JFXTreeTableView>
-                  </children>
-                </VBox>
-              </children>
-           </StackPane>
-         </center>
-      </BorderPane>
-   </children>
+                        </VBox>
+                    </children>
+                </StackPane>
+            </center>
+        </BorderPane>
+    </children>
 </AnchorPane>
