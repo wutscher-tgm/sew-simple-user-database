@@ -3,7 +3,6 @@
 ## Aufgabenstellung
 Die detaillierte [Aufgabenstellung](TASK.md) beschreibt die notwendigen Schritte zur Realisierung.
 
-![vueJS client](vue.png)
 ## Server
 
 ### Requirements
@@ -68,6 +67,8 @@ ausgeführt werden.
 
 ## Vue Client
 
+![vueJS client](vue.png)
+
 ### Installation
 Um einen Testserver zu starten:
 ```
@@ -87,6 +88,30 @@ npm run build
 ## JavaFX Client
 > IN DEVELOPMENT
 
+## Installation
+
+```
+cd src/main/java
+gradle build
+gradle run
+```
+
+### Verwendung
+Mit `gradle build` und `gradle run` starten und auf den `LoadUsers` Button drücken.
+
+### TODO
+* [X] READ Funktionalität
+* [ ] CRETE Funktionalität
+* [ ] UPDATE Funktionalität
+* [ ] DELETE Funktionalität
+
+### Probleme
++ Bilder in Tabelle anzeigen
++ Schülerdaten beim starten laden
+
+## Python Client
+> Development not started
+
 ## Quellen
 
 + [VueCLI](https://cli.vuejs.org/)
@@ -99,3 +124,4 @@ npm run build
 + [Axios](https://github.com/axios/axios)
 + [tox](https://tox.readthedocs.io/en/latest/)
 + [TravisCI](https://docs.travis-ci.com/)
++ [JFoenix](http://www.jfoenix.com/)

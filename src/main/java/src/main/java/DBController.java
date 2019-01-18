@@ -1,3 +1,5 @@
+package main.java;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
@@ -94,7 +96,7 @@ public class DBController {
             System.out.println("Edited Email");
         });
 
-        pictureColumn.setCellValueFactory(param -> param.getValue().getValue().picture);
+        //pictureColumn.setCellValueFactory(param -> param.getValue().getValue().picture);
 
         final ObservableList<Student> dummyData = generateDummyData();
         editableTreeTableView.setRoot(new RecursiveTreeItem<>(dummyData, RecursiveTreeObject::getChildren));
@@ -128,7 +130,7 @@ public class DBController {
             JSONArray arr = new JSONArray(client.newCall(request).execute().body().string());
             final ObservableList<Student> dummyData = FXCollections.observableArrayList();
             for(Object a: arr){
-                dummyData.add(new Student((String)((JSONObject) a).get("email"), (String)((JSONObject) a).get("username"), new ImageView()));
+                dummyData.add(new Student((String)((JSONObject) a).get("email"), (String)((JSONObject) a).get("username")/*, new ImageView()*/));
             }
             return dummyData;
         }catch(Exception e){
@@ -142,12 +144,12 @@ public class DBController {
     static final class Student extends RecursiveTreeObject<Student> {
         final StringProperty username;
         final StringProperty email;
-        final ImageView picture;
+        //final ImageView picture;
 
-        Student(String email, String username, ImageView picture) {
+        Student(String email, String username/*, ImageView picture*/) {
             this.email = new SimpleStringProperty(email);
             this.username = new SimpleStringProperty(username);
-            this.picture = picture;
+            /*this.picture = picture;*/
         }
 
         StringProperty usernameProperty() {
@@ -158,9 +160,9 @@ public class DBController {
             return email;
         }
 
-        ImageView pictureProperty() {
+        /*ImageView pictureProperty() {
             return picture;
-        }
+        }*/
     }
 
     @FXML
