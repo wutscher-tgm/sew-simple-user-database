@@ -13,7 +13,8 @@
     "cypress-and-cleanup": "npm run cy:run && rm db.json",
     "node-server": "npm run dev&",
     "test2": "start-test node-server http://localhost:8080/ cypress-and-cleanup",
-    "test": "start-test server http://localhost:5000/students test2",
+    "test": "npm run cy:run && rm db.json",
+    "test3": "start-test server http://localhost:5000/students test2",
     "server": "python ..\\..\\python\\server\\main.py"
   },
   "dependencies": {
