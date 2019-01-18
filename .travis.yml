@@ -10,14 +10,8 @@ matrix:
     language: 'node_js'
     install:
     - cd src/main/vue/client
-    - npm ci
-
-
-
-
-
-
-
-
-
+    - npm install
+    before_script:
+    - python ..\\..\\python\\server\\main.py &
+    - npm run dev &
     script: npm test
