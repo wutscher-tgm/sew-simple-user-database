@@ -26,7 +26,7 @@
                    v-model="addStudentInput.name" placeholder="Enter username"></td>
         <td>
           <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="button" v-on:click="addStudent()" class="btn btn-success">Upload</button>
+            <button type="button" v-on:click="addStudent()" id="createStudentButton" class="btn btn-success">Upload</button>
             <button type="button" class="btn btn-danger">Cancel</button>
           </div>
         </td>
