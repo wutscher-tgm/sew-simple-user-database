@@ -11,7 +11,7 @@ matrix:
     node_js:
       - 10
     install:
-    - pip install -r requirements
+    - pip install -r requirements.txt
     - cd src/main/vue/client
     - npm ci
     script:
