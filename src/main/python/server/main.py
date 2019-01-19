@@ -62,7 +62,7 @@ class DB:
         else:
             return self.__db
 
-    def update(self, email, username: null, picture: null):
+    def update(self, email, username=null, picture=null):
         if email != null:
             for element in self.__db:
                 if element['email'] == email:
