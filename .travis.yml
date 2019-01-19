@@ -12,7 +12,8 @@ matrix:
       - 10
     install:
     - cd src/main/vue/client
+    - npm ci
     script:
-    - python ..\\..\\python\\server\\main.py &
+    - python ../../python/server/main.py &
     - npm run dev &
     - npm test
