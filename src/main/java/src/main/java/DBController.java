@@ -7,8 +7,10 @@ import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.cells.editors.TextFieldEditorBuilder;
 import com.jfoenix.controls.cells.editors.base.GenericEditableTreeTableCell;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -22,6 +24,7 @@ import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
 
 import java.awt.*;
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Random;
 import io.datafx.controller.ViewController;
@@ -60,6 +63,8 @@ public class DBController {
 
     private final Random random = new SecureRandom();
 
+    private OkHttpClient client = new OkHttpClient();
+
     @PostConstruct
     public void init() {
         setupEditableTableView();
@@ -77,11 +82,28 @@ public class DBController {
                     new TextFieldEditorBuilder());
         });
         usernameColumn.setOnEditCommit((TreeTableColumn.CellEditEvent<Student, String> t) -> {
-            t.getTreeTableView()
-                    .getTreeItem(t.getTreeTablePosition()
-                            .getRow())
-                    .getValue().usernameProperty().set(t.getNewValue());
-            System.out.println("Edited Username");
+            Student student = t.getTreeTableView().getTreeItem(t.getTreeTablePosition().getRow()).getValue();
+            String email = student.emailProperty().getValue();
+            String username = t.getNewValue();
+            System.out.println("Edited Username at "+email);
+
+            String postBody = "";
+
+            final MediaType MEDIA_TYPE_MARKDOWN
+                    = MediaType.parse("text/x-markdown; charset=utf-8");
+
+            Request request = new Request.Builder()
+                    .url("http://localhost:5000/students?email="+email+"&username="+username)
+                    .patch(RequestBody.create(MEDIA_TYPE_MARKDOWN, postBody))
+                    .build();
+
+            try {
+                this.client.newCall(request).execute().body().string();
+                student.usernameProperty().set(username);
+            } catch (IOException e) {
+                //TODO
+                e.printStackTrace();
+            }
         });
 
         emailColumn.setCellFactory((TreeTableColumn<Student, String> param) -> {
