@@ -6,11 +6,13 @@ matrix:
     - "3.6"
     install: pip install tox-travis
     script: tox
-  #- stage: Vue
-  #  language: 'node_js'
-  #  before_install:
-  #  - cd src/main/vue/client
-  #  script:
-  #  - npm test
-  #  - python ..\\..\\python\\server\\main.py &
-  #  - npm run dev &
+  - stage: Vue
+    language: 'node_js'
+    node_js:
+      - 10
+    install:
+    - cd src/main/vue/client
+    script:
+    - npm test
+    - python ..\\..\\python\\server\\main.py &
+    - npm run dev &
