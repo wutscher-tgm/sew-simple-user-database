@@ -13,6 +13,6 @@ matrix:
     install:
     - cd src/main/vue/client
     script:
-    - npm test
     - python ..\\..\\python\\server\\main.py &
     - npm run dev &
+    - npm test
