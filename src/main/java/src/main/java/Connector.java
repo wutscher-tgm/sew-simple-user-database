@@ -35,5 +35,19 @@ public class Connector {
         this.client.newCall(request).execute().body().string();
     }
 
+    public void delete(String email) throws IOException {
+        String postBody = "";
+
+        final MediaType MEDIA_TYPE_MARKDOWN
+                = MediaType.parse("text/x-markdown; charset=utf-8");
+
+        Request request = new Request.Builder()
+                .url(this.url+"/students?email="+email)
+                .delete(RequestBody.create(MEDIA_TYPE_MARKDOWN, postBody))
+                .build();
+
+        this.client.newCall(request).execute().body().string();
+    }
+
 
 }

@@ -77,6 +77,18 @@ public class DBController {
         setupEditableTableView();
     }
 
+    @FXML
+    public void onDelete(){
+        Student s = editableTreeTableView.getSelectionModel().getSelectedItem().getValue();
+        try {
+            this.connector.delete(s.emailProperty().getValue());
+            this.setupEditableTableView();
+        } catch (IOException e) {
+            this.errorLabel.setText("Could not delete user due to connection issues");
+            e.printStackTrace();
+        }
+    }
+
     private void setupEditableTableView() {
         setupCellValueFactory(usernameColumn, Student::usernameProperty);
         setupCellValueFactory(emailColumn, Student::emailProperty);
@@ -106,18 +118,21 @@ public class DBController {
             return new GenericEditableTreeTableCell<>(
                     new TextFieldEditorBuilder());
         });
-        emailColumn.setOnEditCommit((TreeTableColumn.CellEditEvent<Student, String> t) -> {
+        /*emailColumn.setOnEditCommit((TreeTableColumn.CellEditEvent<Student, String> t) -> {
             t.getTreeTableView()
                     .getTreeItem(t.getTreeTablePosition()
                             .getRow())
                     .getValue().emailProperty().set(t.getNewValue());
             System.out.println("Edited Email");
-        });
+        });*/
+        emailColumn.setEditable(false);
 
         editableTreeTableView.setOnKeyReleased(event -> {
             Object o = event.getSource();
-            System.out.println(o.getClass());
+            System.out.println(editableTreeTableView.getSelectionModel().getSelectedItem());
         });
+
+
 
         editableTreeTableView.setOnContextMenuRequested(event -> {
             Object o = event.getPickResult().getIntersectedNode().getParent();

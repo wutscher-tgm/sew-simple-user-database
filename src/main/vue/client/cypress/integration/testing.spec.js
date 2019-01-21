@@ -9,13 +9,15 @@ context('GUI Test', () => {
     })
 
     it('Test create student', () => {
-
-        var length_before = cy.get('#tbody').find('tr');
-        var email = chance.email()
+        var email = chance.email();
         cy.get('#addStudentEmail').type(email);
         cy.get('#addStudentUsername').type(chance.string());
         cy.get('#createStudentButton').click();
 
-        cy.get('#tbody').contains(email)
+        cy.get('#tbody').contains(email);
+    })
+
+    it('Test delete student', ()=>{
+        
     })
 });
