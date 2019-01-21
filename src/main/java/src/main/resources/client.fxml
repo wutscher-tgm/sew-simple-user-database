@@ -16,16 +16,18 @@
                         <VBox maxHeight="600" maxWidth="600" spacing="10">
                             <children>
 
-                                <HBox alignment="CENTER">
+                                <VBox alignment="CENTER">
                                     <children>
-                                        <HBox alignment="CENTER">
+                                        <Label styleClass="title-label">Simple User Database</Label>
+                                        <Label fx:id="errorLabel" styleClass="title-label"></Label>
+                                        <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                                             <children>
-                                                <JFXButton fx:id="testButton" onAction="#test" text="Load Users"/>
-                                                <Label styleClass="title-label">Simple User Database</Label>
-                                                <Label fx:id="editableTreeTableViewCount" styleClass="title-label"/>
+                                                <JFXButton fx:id="testButton" onAction="#test" text="Reload Users"/>
+                                                <!--<Label fx:id="editableTreeTableViewCount" styleClass="title-label"/>-->
                                             </children>
                                         </HBox>
-                                        <StackPane HBox.hgrow="ALWAYS">
+
+                                        <StackPane VBox.vgrow="ALWAYS">
                                             <children>
                                                 <StackPane maxWidth="200" StackPane.alignment="CENTER_RIGHT">
                                                     <children>
@@ -35,7 +37,7 @@
                                             </children>
                                         </StackPane>
                                     </children>
-                                </HBox>
+                                </VBox>
                                 <JFXTreeTableView fx:id="editableTreeTableView">
                                     <columns>
                                         <JFXTreeTableColumn fx:id="pictureColumn" minWidth="133"

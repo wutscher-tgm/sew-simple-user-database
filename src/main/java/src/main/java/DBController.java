@@ -1,9 +1,6 @@
 package main.java;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTreeTableColumn;
-import com.jfoenix.controls.JFXTreeTableView;
-import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.*;
 import com.jfoenix.controls.cells.editors.TextFieldEditorBuilder;
 import com.jfoenix.controls.cells.editors.base.GenericEditableTreeTableCell;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
@@ -20,10 +17,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
 
-import java.awt.*;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Random;
@@ -36,6 +33,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.json.*;
+
+import main.java.Connector;
 
 @ViewController(value = "/fxml/ui/TreeTableView.fxml", title = "Material Design Example")
 public class DBController {
@@ -56,6 +55,9 @@ public class DBController {
     @FXML
     private JFXButton testButton;
 
+    @FXML
+    private Label errorLabel;
+
     private final String[] names = {"Morley", "Scott", "Kruger", "Lain",
             "Kennedy", "Gawron", "Han", "Hall", "Aydogdu", "Grace",
             "Spiers", "Perera", "Smith", "Connoly",
@@ -63,12 +65,16 @@ public class DBController {
 
     private final Random random = new SecureRandom();
 
-    private OkHttpClient client = new OkHttpClient();
+    private Connector connector = new Connector("http://localhost:5000");
+
+    @FXML
+    protected void initialize(){
+        setupEditableTableView();
+    }
 
     @PostConstruct
     public void init() {
         setupEditableTableView();
-        System.out.println("Test");
     }
 
     private void setupEditableTableView() {
@@ -87,21 +93,11 @@ public class DBController {
             String username = t.getNewValue();
             System.out.println("Edited Username at "+email);
 
-            String postBody = "";
-
-            final MediaType MEDIA_TYPE_MARKDOWN
-                    = MediaType.parse("text/x-markdown; charset=utf-8");
-
-            Request request = new Request.Builder()
-                    .url("http://localhost:5000/students?email="+email+"&username="+username)
-                    .patch(RequestBody.create(MEDIA_TYPE_MARKDOWN, postBody))
-                    .build();
-
             try {
-                this.client.newCall(request).execute().body().string();
+                this.connector.update(email, username);
                 student.usernameProperty().set(username);
             } catch (IOException e) {
-                //TODO
+                errorLabel.setText("UPDATING STUDENT FAILED");
                 e.printStackTrace();
             }
         });
@@ -118,10 +114,32 @@ public class DBController {
             System.out.println("Edited Email");
         });
 
+        editableTreeTableView.setOnKeyReleased(event -> {
+            Object o = event.getSource();
+            System.out.println(o.getClass());
+        });
+
+        editableTreeTableView.setOnContextMenuRequested(event -> {
+            Object o = event.getPickResult().getIntersectedNode().getParent();
+
+            JFXTreeTableRow row = null;
+
+            if(o instanceof JFXTreeTableRow){
+                row = (JFXTreeTableRow) o;
+            }else if(o instanceof GenericEditableTreeTableCell){
+                row = (JFXTreeTableRow)((GenericEditableTreeTableCell) o).getParent();
+            }else{
+                row = (JFXTreeTableRow) ((javafx.scene.Group)o).getChildren().toArray()[0];
+            }
+
+            Student student = (Student) row.getItem();
+            System.out.println(student.emailProperty().getValue());
+        });
+
         //pictureColumn.setCellValueFactory(param -> param.getValue().getValue().picture);
 
-        final ObservableList<Student> dummyData = generateDummyData();
-        editableTreeTableView.setRoot(new RecursiveTreeItem<>(dummyData, RecursiveTreeObject::getChildren));
+        final ObservableList<Student> students = getStudents();
+        editableTreeTableView.setRoot(new RecursiveTreeItem<>(students, RecursiveTreeObject::getChildren));
         editableTreeTableView.setShowRoot(false);
         editableTreeTableView.setEditable(true);
         /*editableTreeTableViewCount.textProperty()
@@ -141,21 +159,17 @@ public class DBController {
         });
     }
 
-    private ObservableList<Student> generateDummyData() {
+    private ObservableList<Student> getStudents() {
 
-        OkHttpClient client = new OkHttpClient();
-
-        Request request = new Request.Builder()
-                .url("http://localhost:5000/students")
-                .build();
         try{
-            JSONArray arr = new JSONArray(client.newCall(request).execute().body().string());
+            JSONArray arr = new JSONArray(connector.get());
             final ObservableList<Student> dummyData = FXCollections.observableArrayList();
             for(Object a: arr){
                 dummyData.add(new Student((String)((JSONObject) a).get("email"), (String)((JSONObject) a).get("username")/*, new ImageView()*/));
             }
             return dummyData;
         }catch(Exception e){
+            errorLabel.setText("LOADING STUDENT DATA FAILED");
             e.printStackTrace();
         }
 
