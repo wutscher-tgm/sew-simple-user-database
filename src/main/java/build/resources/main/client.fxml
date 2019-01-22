@@ -19,18 +19,8 @@
 
                                 <VBox alignment="CENTER">
                                     <children>
-                                        <Label styleClass="title-label">Simple User Database</Label>
-                                        <Label fx:id="errorLabel" styleClass="title-label"></Label>
-                                        <VBox alignment="CENTER" VBox.vgrow="ALWAYS" spacing="20">
-                                            <children>
-                                                <JFXButton fx:id="testButton" buttonType="RAISED" onAction="#test"
-                                                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="Reload Users"/>
-                                                <!--<Label fx:id="editableTreeTableViewCount" styleClass="title-label"/>-->
-                                                <JFXButton fx:id="deleteButton" buttonType="RAISED" onAction="#onDelete"
-                                                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="Delete User"/>
-                                            </children>
-                                        </VBox>
-
+                                        <Label styleClass="title-label" style="-fx-font-size: 30px">Simple User Database</Label>
+                                        <!--<Label fx:id="errorLabel" styleClass="title-label"></Label>-->
                                         <!--<StackPane VBox.vgrow="ALWAYS">
                                             <children>
                                                 <StackPane StackPane.alignment="CENTER_RIGHT">
@@ -55,6 +45,16 @@
                                 <VBox alignment="CENTER" VBox.vgrow="ALWAYS" spacing="20">
                                     <children>
 
+                                        <VBox alignment="CENTER" VBox.vgrow="ALWAYS" spacing="20">
+                                            <children>
+                                                <JFXButton fx:id="testButton" buttonType="RAISED" onAction="#onReload"
+                                                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="Reload Users"/>
+                                                <!--<Label fx:id="editableTreeTableViewCount" styleClass="title-label"/>-->
+                                                <JFXButton fx:id="deleteButton" buttonType="RAISED" onAction="#onDelete"
+                                                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="Delete User"/>
+                                            </children>
+                                        </VBox>
+
                                         <JFXTextField fx:id="usernameCreate" maxWidth="256" promptText="Username"/>
 
                                         <JFXTextField fx:id="emailCreate" maxWidth="256" promptText="Email"/>
@@ -71,5 +71,21 @@
                 </StackPane>
             </center>
         </BorderPane>
+
+
+        <JFXDialog fx:id="dialog">
+            <JFXDialogLayout>
+                <heading>
+                    <Label>AN ERROR HAS OCCURED!</Label>
+                </heading>
+                <body>
+                    <Label fx:id="errorDialogText"></Label>
+                </body>
+                <actions>
+                    <JFXButton fx:id="acceptButton" onAction="#onMessageClose" styleClass="dialog-accept">ACCEPT
+                    </JFXButton>
+                </actions>
+            </JFXDialogLayout>
+        </JFXDialog>
     </children>
 </AnchorPane>
