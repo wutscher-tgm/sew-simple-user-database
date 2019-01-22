@@ -14,14 +14,14 @@
                 <StackPane fx:id="root" xmlns="http://javafx.com/javafx/2.2" xmlns:fx="http://javafx.com/fxml/1">
                     <children>
 
-                        <VBox>
+                        <VBox spacing="20">
                             <children>
 
                                 <VBox alignment="CENTER">
                                     <children>
                                         <Label styleClass="title-label">Simple User Database</Label>
                                         <Label fx:id="errorLabel" styleClass="title-label"></Label>
-                                        <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                                        <VBox alignment="CENTER" VBox.vgrow="ALWAYS" spacing="20">
                                             <children>
                                                 <JFXButton fx:id="testButton" buttonType="RAISED" onAction="#test"
                                                            style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="Reload Users"/>
@@ -31,7 +31,7 @@
                                             </children>
                                         </VBox>
 
-                                        <StackPane VBox.vgrow="ALWAYS">
+                                        <!--<StackPane VBox.vgrow="ALWAYS">
                                             <children>
                                                 <StackPane StackPane.alignment="CENTER_RIGHT">
                                                     <children>
@@ -39,7 +39,7 @@
                                                     </children>
                                                 </StackPane>
                                             </children>
-                                        </StackPane>
+                                        </StackPane>-->
                                     </children>
                                 </VBox>
                                 <JFXTreeTableView fx:id="editableTreeTableView">
@@ -52,19 +52,19 @@
                                                             resizable="true" text="Email"/>
                                     </columns>
                                 </JFXTreeTableView>
-                                <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                                <VBox alignment="CENTER" VBox.vgrow="ALWAYS" spacing="20">
                                     <children>
 
-                                        <JFXTextField fx:id="usernameCreate" promptText="Username"/>
+                                        <JFXTextField fx:id="usernameCreate" maxWidth="256" promptText="Username"/>
 
-                                        <JFXTextField fx:id="emailCreate" promptText="Email"/>
+                                        <JFXTextField fx:id="emailCreate" maxWidth="256" promptText="Email"/>
 
-                                        <JFXTextField fx:id="linkCreate" promptText="Picture Link"/>
+                                        <JFXTextField fx:id="linkCreate" maxWidth="256" promptText="Picture Link"/>
 
                                         <JFXButton fx:id="sendButton" buttonType="RAISED" onAction="#onSend"
                                                    style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="Create User"/>
                                     </children>
-                                </HBox>
+                                </VBox>
                             </children>
                         </VBox>
                     </children>
