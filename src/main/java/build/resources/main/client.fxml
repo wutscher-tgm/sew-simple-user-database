@@ -21,17 +21,19 @@
                                     <children>
                                         <Label styleClass="title-label">Simple User Database</Label>
                                         <Label fx:id="errorLabel" styleClass="title-label"></Label>
-                                        <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                                        <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
                                             <children>
                                                 <JFXButton fx:id="testButton" buttonType="RAISED" onAction="#test"
                                                            style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="Reload Users"/>
                                                 <!--<Label fx:id="editableTreeTableViewCount" styleClass="title-label"/>-->
+                                                <JFXButton fx:id="deleteButton" buttonType="RAISED" onAction="#onDelete"
+                                                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="Delete User"/>
                                             </children>
-                                        </HBox>
+                                        </VBox>
 
                                         <StackPane VBox.vgrow="ALWAYS">
                                             <children>
-                                                <StackPane maxWidth="200" StackPane.alignment="CENTER_RIGHT">
+                                                <StackPane StackPane.alignment="CENTER_RIGHT">
                                                     <children>
                                                         <JFXTextField fx:id="searchField2" promptText="Search..."/>
                                                     </children>
@@ -42,18 +44,25 @@
                                 </VBox>
                                 <JFXTreeTableView fx:id="editableTreeTableView">
                                     <columns>
-                                        <JFXTreeTableColumn fx:id="pictureColumn" minWidth="133"
-                                                            resizable="false" text="Picture"/>
-                                        <JFXTreeTableColumn fx:id="usernameColumn" minWidth="133"
-                                                            resizable="false" text="Username"/>
-                                        <JFXTreeTableColumn fx:id="emailColumn" minWidth="133"
-                                                            resizable="false" text="Email"/>
+                                        <JFXTreeTableColumn fx:id="pictureColumn"
+                                                            resizable="true" text="Picture"/>
+                                        <JFXTreeTableColumn fx:id="usernameColumn"
+                                                            resizable="true" text="Username"/>
+                                        <JFXTreeTableColumn fx:id="emailColumn"
+                                                            resizable="true" text="Email"/>
                                     </columns>
                                 </JFXTreeTableView>
-                                <HBox>
+                                <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                                     <children>
-                                        <JFXButton fx:id="deleteButton" buttonType="RAISED" onAction="#onDelete"
-                                                   style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="Delete User"/>
+
+                                        <JFXTextField fx:id="usernameCreate" promptText="Username"/>
+
+                                        <JFXTextField fx:id="emailCreate" promptText="Email"/>
+
+                                        <JFXTextField fx:id="linkCreate" promptText="Picture Link"/>
+
+                                        <JFXButton fx:id="sendButton" buttonType="RAISED" onAction="#onSend"
+                                                   style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="Create User"/>
                                     </children>
                                 </HBox>
                             </children>

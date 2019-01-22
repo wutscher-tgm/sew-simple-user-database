@@ -50,4 +50,24 @@ public class Connector {
     }
 
 
+    public void create(String email, String username, String pictureLink) throws IOException {
+        String postBody = "";
+
+        final MediaType MEDIA_TYPE_MARKDOWN
+                = MediaType.parse("text/x-markdown; charset=utf-8");
+
+        String path = this.url+"/students?email="+email+"&username="+username;
+
+        if(!pictureLink.equals("")){
+            path += "&pictureLink="+pictureLink;
+        }
+        Request request = new Request.Builder()
+                .url(path)
+                .post(RequestBody.create(MEDIA_TYPE_MARKDOWN, postBody))
+                .build();
+
+        this.client.newCall(request).execute().body().string();
+    }
+
+
 }

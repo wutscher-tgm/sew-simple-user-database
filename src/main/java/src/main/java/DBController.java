@@ -58,6 +58,13 @@ public class DBController {
     @FXML
     private Label errorLabel;
 
+    @FXML
+    private JFXTextField usernameCreate;
+    @FXML
+    private JFXTextField emailCreate;
+    @FXML
+    private JFXTextField linkCreate;
+
     private final String[] names = {"Morley", "Scott", "Kruger", "Lain",
             "Kennedy", "Gawron", "Han", "Hall", "Aydogdu", "Grace",
             "Spiers", "Perera", "Smith", "Connoly",
@@ -70,6 +77,17 @@ public class DBController {
     @FXML
     protected void initialize(){
         setupEditableTableView();
+    }
+
+    @FXML
+    private void onSend(){
+        try {
+            this.connector.create(emailCreate.getText(), usernameCreate.getText(), linkCreate.getText());
+            this.setupEditableTableView();
+        } catch (IOException e) {
+            this.errorLabel.setText("Could not create User");
+            e.printStackTrace();
+        }
     }
 
     @PostConstruct
