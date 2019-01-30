@@ -74,7 +74,7 @@
     },
     methods: {
       getStudents() {
-        const path = 'http://localhost:5000/students';
+        const path = 'http://192.168.99.100:5000/students';
         axios.get(path)
           .then((res) => {
             this.students = res.data;

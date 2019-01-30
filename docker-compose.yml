@@ -9,7 +9,7 @@ services:
   vue-client:
     build: src/main/vue/client/
     ports:
-      - "80:8080"
+      - "80:80"
     volumes:
       - ./src/main/vue/client/:/code
       #- /code/node_modules/
