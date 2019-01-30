@@ -49,6 +49,9 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addWidget(self.sendButton)
         self.verticalLayout.addLayout(self.verticalLayout_2)
         self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 1)
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setObjectName("label_2")
+        self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 566, 21))
@@ -69,4 +72,5 @@ class Ui_MainWindow(object):
         self.usernameCreate.setPlaceholderText(_translate("MainWindow", "Username"))
         self.linkCreate.setPlaceholderText(_translate("MainWindow", "Picture Link"))
         self.sendButton.setText(_translate("MainWindow", "Create"))
+        self.label_2.setText(_translate("MainWindow", "TextLabel"))
 

@@ -1,0 +1,17 @@
+version: '3'
+services:
+  python-server:
+    build: src/main/python/server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./src/main/python/server:/code
+  vue-client:
+    build: src/main/vue/client/
+    ports:
+      - "80:8080"
+    volumes:
+      - ./src/main/vue/client/:/code
+      #- /code/node_modules/
+    depends_on:
+      - python-server

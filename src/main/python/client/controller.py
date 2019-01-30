@@ -6,12 +6,15 @@ Created on 22.01.2019
 
 @description: Client für die simple user database
 """
-from PyQt5.QtGui import QFont
+import ast
+import base64
+import urllib
+
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QTableWidgetItem
 
 from clientView import Ui_MainWindow as ClientView
 from PyQt5 import QtCore, QtGui, QtWidgets
-from functools import *
 import requests
 import json
 
@@ -24,10 +27,6 @@ class ClientController(object):
 
         self.view.setupUi(self.dialog)
 
-        with open('material.qcss', 'r') as myfile:
-            data = myfile.read().replace('\n', '')
-            #self.dialog.setStyleSheet(data)
-
         self.loadUsers()
         self.view.sendButton.clicked.connect(self.send)
 
@@ -36,7 +35,7 @@ class ClientController(object):
         res = requests.get('http://localhost:5000/students')
         res = json.loads(res.text)
 
-        print(res)
+        #print(res)
 
         self.view.tableWidget.setColumnCount(3)
         self.view.tableWidget.setRowCount(len(res)+1)
@@ -44,8 +43,19 @@ class ClientController(object):
         self.view.tableWidget.setItem(0, 1, QTableWidgetItem('Email'))
         self.view.tableWidget.setItem(0, 2, QTableWidgetItem('Username'))
 
+
         for index, element in enumerate(res):
-            self.view.tableWidget.setItem(index+1, 0, QTableWidgetItem(element['picture']))
+            if element['picture'] != None and False:
+                image = element['picture']
+                image = base64.b64encode(base64.b64decode(image))
+                bytearr = QtCore.QByteArray.fromBase64(image)
+                pixmap = QPixmap()
+                pixmap.loadFromData(bytearr)
+                #pixmap.scaled(10, 10, QtCore.Qt.KeepAspectRatio)
+                item = QTableWidgetItem()
+                item.setData(1,pixmap)
+                self.view.tableWidget.setItem(index+1, 0, item)
+
             self.view.tableWidget.setItem(index+1, 1, QTableWidgetItem(element['email']))
             self.view.tableWidget.setItem(index+1, 2, QTableWidgetItem(element['username']))
 
@@ -54,15 +64,12 @@ class ClientController(object):
         self.dialog.show()
 
     def send(self):
+        username = self.view.usernameCreate
+        email = self.view.emailCreate
+        picture = self.view.linkCreate
+
+        res = requests.post('http://localhost/students?username='+username+'&email='+email+'pictureLink='+picture)
         print('hallo')
-    def received(self, data):
-        print("seas")
-        #self.view.messages.addItem(data)
-        """
-        items = []
-        for index in range(self.listWidget.count()):
-            items.append(self.listWidget.item(index))
-        """
 
     def close(self):
         pass
