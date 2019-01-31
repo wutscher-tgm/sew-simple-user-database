@@ -2,8 +2,6 @@ import io
 
 import pytest
 import server.main
-from flask import url_for
-from flask import Flask
 import base64
 
 @pytest.fixture

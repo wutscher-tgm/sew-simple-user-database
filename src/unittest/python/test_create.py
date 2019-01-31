@@ -2,8 +2,6 @@ import io
 
 import pytest
 import server.main
-import base64
-
 @pytest.fixture
 def client():
     open('db.json', "w+")

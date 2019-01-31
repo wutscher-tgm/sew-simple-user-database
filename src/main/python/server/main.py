@@ -70,6 +70,8 @@ class DB:
 
     def delete(self, email):
         entry = self.get(email=email)
+        if entry == None:
+            return None
         self.__db.remove(entry)
         self.save(self.__db)
 
@@ -167,7 +169,9 @@ class Schueler(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str)
         email = parser.parse_args().email
-        self.__db.delete(email)
+        result = self.__db.delete(email)
+        if result == None:
+            return "user not found", 404
 
 
 api.add_resource(Schueler, '/students')
