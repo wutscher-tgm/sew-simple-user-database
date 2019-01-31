@@ -48,17 +48,11 @@ class DB:
         self.save(self.__db)
         return "successful"
 
-    def get(self, email=null, username=null):
+    def get(self, email=null):
         if email != null:
             for element in self.__db:
                 if element['email'] == email:
                     return element
-        elif username != null:
-            rs = []
-            for element in self.__db:
-                if element['username'] == username:
-                    rs += [element]
-            return rs
         else:
             return self.__db
 
@@ -86,9 +80,9 @@ class Schueler(Resource):
     def post(self):
         # Getting arguments from request
         parser = reqparse.RequestParser()
-        parser.add_argument('email', type=str, location='args')
-        parser.add_argument('username', type=str, location='args')
-        parser.add_argument('pictureLink', type=str, location='args')
+        parser.add_argument('email', type=str)
+        parser.add_argument('username', type=str)
+        parser.add_argument('pictureLink', type=str)
         parser.add_argument('picture', type=werkzeug.datastructures.FileStorage, location='files')
 
         # Loading arguments into easily usable variables
@@ -111,9 +105,6 @@ class Schueler(Resource):
         elif pictureLink != null:
             picture = (base64.b64encode((urllib.request.urlopen(pictureLink)).read())).decode("utf-8")
 
-        print("picture: ")
-        print(picture)
-
         if (email == null or username == null):
             return "arguments invalid"
         return self.__db.addEntry(
@@ -133,9 +124,9 @@ class Schueler(Resource):
         username = parser.parse_args().username
 
         if email != null:
-            return self.__db.get(email=email)
-        elif username != null:
-            return self.__db.get(username=username)
+            data = self.__db.get(email=email)
+            if(data == None): return "user not found", 404
+            return data, 200
         else:
             return self.__db.get()
 
@@ -160,7 +151,6 @@ class Schueler(Resource):
         elif (pictureB64 != null) and (pictureLink != null):
             return 'too many arguments provided, can only use one picture source'
 
-        print(pictureLink)
         if pictureB64 != null:
             picture = (base64.b64encode(pictureB64.read())).decode("utf-8")
         elif pictureLink != null:
