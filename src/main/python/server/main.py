@@ -64,7 +64,9 @@ class DB:
                         element['username'] = username
                     if picture != null:
                         element['picture'] = picture
-        self.save(self.__db)
+                    self.save(self.__db)
+                    return 1
+            return None
 
     def delete(self, email):
         entry = self.get(email=email)
@@ -133,9 +135,9 @@ class Schueler(Resource):
     def patch(self):
         # Getting arguments from request
         parser = reqparse.RequestParser()
-        parser.add_argument('email', type=str, location='args')
-        parser.add_argument('username', type=str, location='args')
-        parser.add_argument('pictureLink', type=str, location='args')
+        parser.add_argument('email', type=str)
+        parser.add_argument('username', type=str)
+        parser.add_argument('pictureLink', type=str)
         parser.add_argument('picture', type=werkzeug.datastructures.FileStorage, location='files')
 
         # Loading arguments into easily usable variables
@@ -147,23 +149,23 @@ class Schueler(Resource):
 
         # Checking if arguments are valid
         if email == null:
-            return 'argument "email" is missing'
+            return 'argument "email" is missing', 404
         elif (pictureB64 != null) and (pictureLink != null):
-            return 'too many arguments provided, can only use one picture source'
+            return 'too many arguments provided, can only use one picture source', 500
 
         if pictureB64 != null:
             picture = (base64.b64encode(pictureB64.read())).decode("utf-8")
         elif pictureLink != null:
             picture = (base64.b64encode((urllib.request.urlopen(pictureLink)).read())).decode("utf-8")
 
-        if (email == null or username == null):
-            return "arguments invalid"
-
-        return self.__db.update(email, username=username, picture=picture)
+        result = self.__db.update(email, username=username, picture=picture)
+        if result == None:
+            return "user not found", 404
+        return result
 
     def delete(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('email', type=str, location='args')
+        parser.add_argument('email', type=str)
         email = parser.parse_args().email
         self.__db.delete(email)
 

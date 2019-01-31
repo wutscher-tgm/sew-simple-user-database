@@ -6,20 +6,14 @@ from flask import url_for
 from flask import Flask
 import base64
 
-
-@pytest.yield_fixture(autouse=True)
-def run_around_tests():
-    file = open('db.json', "w+")
-    file.write('[]')
-
-
 @pytest.fixture
 def client():
+    open('db.json', "w+")
     server.main.app.testing = True
     client = server.main.app.test_client()
     yield client
 
-def test_get_one_by_email(client):
+def test_get_one(client):
     client.post('/students', data={
         "email": "rwutscher@student.tgm.ac.at",
         "username": "rwutscher"
@@ -74,7 +68,7 @@ def test_get_one_with_picture_link(client):
             'picture': base64.b64encode(f.read()).decode("utf-8")
         }
 
-def test_get_one_with_picture(client):
+def test_get_one_with_picture_file(client):
     with open('pp.jpg', 'rb') as f:
         client.post('/students', data={
             "email": "rwutscher@student.tgm.ac.at",

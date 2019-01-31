@@ -4,13 +4,9 @@ import pytest
 import server.main
 import base64
 
-@pytest.yield_fixture(autouse=True)
-def run_around_tests():
-    file = open('db.json', "w+")
-    file.write('[]')
-
 @pytest.fixture
 def client():
+    open('db.json', "w+")
     server.main.app.testing = True
     client = server.main.app.test_client()
     yield client
@@ -43,7 +39,7 @@ def test_create_with_picture_link(client):
     })
     assert res.json == "successful"
 
-def test_create_with_picture(client):
+def test_create_with_picture_file(client):
     with open('pp.jpg', 'rb') as f:
         res = client.post('/students', data={
             "email": "rwutscher@student.tgm.ac.at",
