@@ -8,3 +8,24 @@
 * [x] 13:40 Travis.yml erstellen und das neue origin/master (Fork) mit TravisCI einbinden und server/client Tests durchführen
 * [ ] 13:15 README erweitern und auf upstream/master pushen
 * [ ] 14:10 weitere GUI-Elemente implementieren/testen/dokumentieren
+
+# 2. Sem
+
+## CRUD authentifizieren
+
+GK:
+mit HTTP-Digest (Snippets -> Flask)
+bestehende UserDB
+(min SHA256)
+EK:
+OAUTH (switching: if no PW-Hash in UserDB)
+Nur admin darf Create, Update, Delete
+Lesen w/o PW-Hash für alle angemeldeten User
+
+## Deployment
+> Kein Werkzeug
+
+GK: lokal
+EK:
+global, z.B.: Heroku / KubernetesCluster
+Zertifikat: HTTPS

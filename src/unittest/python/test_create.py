@@ -17,6 +17,18 @@ def test_create(client):
     })
     assert res.json == "successful"
 
+def test_create_without_email(client):
+    res = client.post('/students', data={
+        "username": "rwutscher"
+    })
+    assert res.json == 'argument "email" is missing'
+
+def test_create_without_username(client):
+    res = client.post('/students', data={
+        "email": "rwutscher@student.tgm.ac.at",
+    })
+    assert res.json == 'argument "username" is missing'
+
 def test_create_duplicate(client):
     res = client.post('/students', data={
         "email": "ntesanovic@student.tgm.ac.at",
@@ -29,6 +41,16 @@ def test_create_duplicate(client):
     })
     assert res.json == "email already exists"
 
+def test_create_with_picture_link_and_file(client):
+    with open('pp.jpg', 'rb') as f:
+        res = client.post('/students', data={
+            "email": "rwutscher@student.tgm.ac.at",
+            "username": "rwutscher",
+            "pictureLink": "https://avatars2.githubusercontent.com/u/25224756?s=460&v=4",
+            "picture": (io.BytesIO(f.read()), 'pp.jpg')
+        }, content_type='multipart/form-data')
+        assert res.json == "too many arguments provided, can only use one picture source"
+
 def test_create_with_picture_link(client):
     res = client.post('/students', data={
         "email": "rwutscher@student.tgm.ac.at",
@@ -36,6 +58,7 @@ def test_create_with_picture_link(client):
         "pictureLink": "https://avatars2.githubusercontent.com/u/25224756?s=460&v=4"
     })
     assert res.json == "successful"
+
 
 def test_create_with_picture_file(client):
     with open('pp.jpg', 'rb') as f:
