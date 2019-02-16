@@ -1,6 +1,5 @@
 import base64
 import urllib
-import sys
 import os
 
 import werkzeug
@@ -18,6 +17,22 @@ api = Api(app)
 from flask_cors import CORS
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+
+# AUTH
+from functools import wraps
+
+class FlaskRealmDigestDB(werkzeug.contrib.authdigest.RealmDigestDB):
+    def requires_auth(self, f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            request = flask.request
+            if not self.isAuthenticated(request):
+                return self.challenge()
+
+            return f(*args, **kwargs)
+
+        return decorated
+# AUTH
 
 class DB:
     def __init__(self, location):
@@ -76,12 +91,16 @@ class DB:
         self.save(self.__db)
 
 
+from flask import request, session
 class Schueler(Resource):
 
     def __init__(self):
+        authDB = FlaskRealmDigestDB('MyAuthRealm')
+        authDB.add_user('admin', 'test')
         self.__db = DB("db.json")
-
+    
     def post(self):
+        
         # Getting arguments from request
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str)
@@ -109,8 +128,6 @@ class Schueler(Resource):
         elif pictureLink != null:
             picture = (base64.b64encode((urllib.request.urlopen(pictureLink)).read())).decode("utf-8")
 
-        if (email == null or username == null):
-            return "arguments invalid"
         return self.__db.addEntry(
             [
                 {"email": email,
@@ -120,7 +137,9 @@ class Schueler(Resource):
             ]
         )
 
+    @authDB.requires_auth
     def get(self):
+        print(request.authorization.username)
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str)
         parser.add_argument('username', type=str)
@@ -173,9 +192,8 @@ class Schueler(Resource):
         if result == None:
             return "user not found", 404
 
-
 api.add_resource(Schueler, '/students')
 
-
+print(__name__)
 if __name__ == '__main__':
     app.run(debug=true, host='0.0.0.0')

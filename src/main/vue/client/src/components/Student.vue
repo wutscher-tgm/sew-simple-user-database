@@ -23,7 +23,7 @@
         EventBus.$emit('updateStudent', this.index);
       },
       deleteStudent: function (email) {
-        const path = `http://localhost:5000/students?email=${email}`;
+        const path = `http://python-server:5000/students?email=${email}`;
         axios.delete(path).then((res) => {
           console.log(res);
           this.getStudents();

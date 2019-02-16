@@ -36,7 +36,7 @@
         var imagefile = document.getElementById(`${this.index}-picture-input`);
         data.append('picture', imagefile.files[0]);
         console.log(data)
-        axios.patch(`http://localhost:5000/students?email=${this.student.email}&username=${document.getElementById(`${this.index}-username-input`).value}`, data,{
+        axios.patch(`http://python-server:5000/students?email=${this.student.email}&username=${document.getElementById(`${this.index}-username-input`).value}`, data,{
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -51,7 +51,7 @@
         this.url = URL.createObjectURL(imagefile.files[0]);
       },
       deleteStudent: function (email) {
-        const path = `http://localhost:5000/students?email=${email}`;
+        const path = `http://python-server:5000/students?email=${email}`;
         axios.delete(path).then((res) => {
           console.log(res);
           this.getStudents();

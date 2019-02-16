@@ -4,5 +4,5 @@ pytest-html
 flask
 flask-restful
 flask-cors
-Werkzeug
+werkzeug>=0.14
 pytest-flask

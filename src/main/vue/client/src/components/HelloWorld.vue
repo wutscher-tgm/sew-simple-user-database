@@ -74,7 +74,7 @@
     },
     methods: {
       getStudents() {
-        const path = window.location.hostname+':5000/students';
+        const path = /*window.location.hostname+*/'http://python-server:5000/students';
         axios.get(path)
           .then((res) => {
             this.students = res.data;
@@ -89,7 +89,7 @@
         var imagefile = document.querySelector('#addStudentFile');
         data.append('picture', imagefile.files[0]);
         console.log(imagefile.files[0]);
-        const path = `http://localhost:5000/students?email=${this.addStudentInput.email}&username=${this.addStudentInput.name}`;
+        const path = `http://python-server:5000/students?email=${this.addStudentInput.email}&username=${this.addStudentInput.name}`;
         axios.post(path, data, {
           headers: {
             'Content-Type': 'multipart/form-data'
