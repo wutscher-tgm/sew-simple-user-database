@@ -5,4 +5,4 @@ flask
 flask-restful
 flask-cors
 werkzeug>=0.14
-pytest-flask
+argon2_cffi
