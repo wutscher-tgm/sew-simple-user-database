@@ -1,3 +1,4 @@
+
 import base64
 import urllib
 import os
@@ -69,7 +70,7 @@ class DB:
             return null
     
 
-    def update(self, email, username=null, picture=null):
+    def update(self, email, username=null, picture=null, password=null):
         if email != null:
             for element in self.__db:
                 if element['email'] == email:
@@ -77,6 +78,8 @@ class DB:
                         element['username'] = username
                     if picture != null:
                         element['picture'] = picture
+                    if password != null:
+                        element['password'] = password
                     self.save(self.__db)
                     return 1
             return None
@@ -107,6 +110,8 @@ class FlaskRealmDigestDB():#(authdigest.RealmDigestDB):
         """
         @wraps(f)
         def decorated(*args, **kwargs):
+            if app.testing:
+                return f(*args, **kwargs)
             if 'tok' in flask.request.cookies:
                 token = flask.request.cookies['tok']
                 for element in tokens:
@@ -194,6 +199,7 @@ class Schueler(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str)
         parser.add_argument('username', type=str)
+        parser.add_argument('password', type=str)
         parser.add_argument('pictureLink', type=str)
         parser.add_argument('picture', type=werkzeug.datastructures.FileStorage, location='files')
 
@@ -202,6 +208,7 @@ class Schueler(Resource):
         pictureLink = parser.parse_args().pictureLink
         username = parser.parse_args().username
         email = parser.parse_args().email
+        password = parser.parse_args().password
         picture = null
 
         # Checking if arguments are valid
@@ -215,7 +222,7 @@ class Schueler(Resource):
         elif pictureLink != null:
             picture = (base64.b64encode((urllib.request.urlopen(pictureLink)).read())).decode("utf-8")
 
-        result = self.__db.update(email, username=username, picture=picture)
+        result = self.__db.update(email, username=username, picture=picture, password=ph.hash(password))
         if result == None:
             return "user not found", 404
         return result
@@ -241,6 +248,7 @@ class Schueler(Resource):
             try:
                 if ph.verify(user['password'], password):
                     token = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+                    #TODO: check that token doesn't exist
                     tokens.append({
                         'token': token,
                         'user': user['password']

@@ -6,6 +6,7 @@ import server.main
 def client():
     open('db.json', "w+")
     server.main.app.testing = True
+    
     client = server.main.app.test_client()
     yield client
 
