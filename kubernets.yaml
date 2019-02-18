@@ -1,29 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-frontend
+  name: sew-sud-server
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: nginx-frontend
+      app: sew-sud-server
   template:
     metadata:
       labels:
-        app: nginx-frontend
+        app: sew-sud-server
     spec:
       containers:
-        - name: nginx-frontend
-          image: rwutscher/homepage
+        - name: sew-sud-server
+          image: rwutscher/sew-sud-server:0.3
           ports:
             - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-frontend-service
+  name: sew-sud-server-service
   labels:
-    app: nginx-frontend
+    app: sew-sud-server
 spec:
   type: NodePort
   ports:
@@ -32,4 +32,4 @@ spec:
     targetPort: 80
     name: http
   selector:
-    app: nginx-frontend
+    app: sew-sud-server
