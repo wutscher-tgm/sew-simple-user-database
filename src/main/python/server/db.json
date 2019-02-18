@@ -1,1 +1,1 @@
-[{"email": "obmi@voilawi.sl", "username": "cc$RzZ3", "picture": null, "password": "hallo"}, {"email": "test@email.com", "username": "testwu", "picture": null, "password": "$argon2id$v=19$m=102400,t=2,p=8$KWzpOjB8Wje6Y1NKOqjUag$YclDgOOlWRevBHZm6AH+Ag"}]
+[{"email": "admin@userdb.com", "username": "admin", "picture": null, "password": "<sha256 HASH object @ 0x7ff3629d4210>"}]

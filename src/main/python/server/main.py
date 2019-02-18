@@ -1,41 +1,19 @@
-
 import base64
 import urllib
 import os
+import hashlib
 
 import werkzeug
-import authdigest
 from flask import Flask
 import flask
 from flask_restful import Resource, Api, reqparse
 import json
 from flask_httpauth import HTTPDigestAuth
-from argon2 import PasswordHasher
-ph = PasswordHasher()
 
 true = True
 false = False
 null = None
 
-app = Flask('SimpleUserDatabase')
-api = Api(app)
-
-app.config['SECRET_KEY'] = 'secret key here'
-auth = HTTPDigestAuth()
-
-users = {
-    "john": "hello",
-    "susan": "bye"
-}
-
-@auth.get_password
-def get_pw(username):
-    if username in users:
-        return users.get(username)
-    return None
-
-from flask_cors import CORS
-CORS(app, resources={r"/*": {"origins": "*"}})
 
 class DB:
     def __init__(self, location):
@@ -74,7 +52,7 @@ class DB:
         else:
             return self.__db
     
-    def getUser(self, email=null):
+    def getUser(self, email):
         if email != null:
             for element in self.__db:
                 if element['email'] == email:
@@ -104,6 +82,31 @@ class DB:
         self.__db.remove(entry)
         self.save(self.__db)
 
+
+app = Flask('SimpleUserDatabase')
+api = Api(app)
+
+app.config['SECRET_KEY'] = 'secret key here'
+auth = HTTPDigestAuth()
+db = DB("db.json")
+db.addEntry([{
+    "email": "admin@userdb.com", 
+    "username": "admin",
+    "picture": null,
+    "password": str(hashlib.sha256('admin'.encode('UTF-8')))
+}])
+
+@auth.get_password
+def get_pw(username):
+    user = db.getUser(username)
+    if user != None:
+        return user.password
+    return None
+
+from flask_cors import CORS
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+
 from flask import request, session  
 class Schueler(Resource):
 
@@ -111,7 +114,7 @@ class Schueler(Resource):
     #('MyAuthRealm', DB("db.json"), algorithm="sha256")
     #authDB.add_user('admin'.encode('utf-8'), 'test'.encode('utf-8'))
     def __init__(self):
-        self.__db = DB("db.json")
+        pass
         #authDB = FlaskRealmDigestDB(self.__db)
     
     @auth.login_required
@@ -124,11 +127,11 @@ class Schueler(Resource):
         username = parser.parse_args().username
 
         if email != null:
-            data = self.__db.get(email=email)
+            data = db.get(email=email)
             if(data == None): return "user not found", 404
             return data, 200
         else:
-            return self.__db.get()
+            return db.get()
     
     def post(self):
         
@@ -161,12 +164,12 @@ class Schueler(Resource):
         elif pictureLink != null:
             picture = (base64.b64encode((urllib.request.urlopen(pictureLink)).read())).decode("utf-8")
 
-        return self.__db.addEntry(
+        return db.addEntry(
             [
                 {"email": email,
                  "username": username,
                  "picture": picture,
-                 "password": ph.hash(password)
+                 "password": str(hashlib.sha256(password.encode('UTF-8')))
                  }
             ]
         )
@@ -199,7 +202,7 @@ class Schueler(Resource):
         elif pictureLink != null:
             picture = (base64.b64encode((urllib.request.urlopen(pictureLink)).read())).decode("utf-8")
 
-        result = self.__db.update(email, username=username, picture=picture, password=ph.hash(password))
+        result = db.update(email, username=username, picture=picture, password=str(hashlib.sha256(password.encode('UTF-8'))))
         if result == None:
             return "user not found", 404
         return result
@@ -208,7 +211,7 @@ class Schueler(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str)
         email = parser.parse_args().email
-        result = self.__db.delete(email)
+        result = db.delete(email)
         if result == None:
             return "user not found", 404
 

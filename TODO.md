@@ -1,4 +1,4 @@
-# TBDs for today
+# 1. Semester
 
 * [X] 12:55 TODO.md erstellen
 * [X] 13:00 Git forken & upstream pushen
@@ -9,23 +9,25 @@
 * [ ] 13:15 README erweitern und auf upstream/master pushen
 * [ ] 14:10 weitere GUI-Elemente implementieren/testen/dokumentieren
 
-# 2. Sem
+# 2. Semester
 
 ## CRUD authentifizieren
 
 GK:
-mit HTTP-Digest (Snippets -> Flask)
-bestehende UserDB
-(min SHA256)
+* [x] mit HTTP-Digest
+* [ ] bestehende UserDB (min SHA256)
+
 EK:
-OAUTH (switching: if no PW-Hash in UserDB)
-Nur admin darf Create, Update, Delete
-Lesen w/o PW-Hash für alle angemeldeten User
+* [ ] OAUTH (switching: if no PW-Hash in UserDB)
+* [ ] Nur admin darf Create, Update, Delete
+* [ ] Lesen w/o PW-Hash für alle angemeldeten User
 
 ## Deployment
-> Kein Werkzeug
 
-GK: lokal
+GK:
+* [x] Lokal
+
+
 EK:
-global, z.B.: Heroku / KubernetesCluster
-Zertifikat: HTTPS
+* [x] global, z.B.: ~~Heroku~~ / __KubernetesCluster__
+* [ ] Zertifikat: HTTPS
