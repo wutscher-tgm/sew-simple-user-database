@@ -11,6 +11,40 @@ def client():
     yield client
 
 
+
+def generate_header(client,method,link):
+    response2 = None
+    if method == 'POST':
+        response2 = client.post(link)
+    if method == 'PUT':
+        response2 = client.put(link)
+    if method == 'DELETE':
+        response2 = client.delete(link)
+    if method == 'GET':
+        response2 = client.get(link)
+    header = response2.headers.get('WWW-Authenticate')
+    auth_type, auth_info = header.split(None, 1)
+    d = parse_dict_header(auth_info)
+    a1 = 'admin:' + d['realm'] + ':admin'
+    realm = d['realm']
+    ha1 = md5(a1).hexdigest()
+    a2 = '%s:%s' % (method, link)
+    ha2 = md5(a2).hexdigest()
+    a3 = ha1 + ':' + d['nonce'] + ':' + ha2
+    auth_response = md5(a3).hexdigest()
+    header = {
+            'Authorization': 'Digest username="admin",realm="{0}",'
+                             'nonce="{1}",uri="{2}",response="{3}",'
+                             'opaque="{4}"'.format(d['realm'],
+                                                   d['nonce'],
+                                                   link,
+                                                   auth_response,
+                                                   d['opaque']
+                                                   )}
+    return header
+
+
+
 def test_create(client):
     res = client.post('/students', data={
         "email": "rwutscher@student.tgm.ac.at",

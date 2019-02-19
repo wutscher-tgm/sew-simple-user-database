@@ -8,7 +8,8 @@ from flask import Flask
 import flask
 from flask_restful import Resource, Api, reqparse
 import json
-from flask_httpauth import HTTPDigestAuth
+from flask_httpauth import HTTPBasicAuth
+from argon2 import PasswordHasher
 
 true = True
 false = False
@@ -85,23 +86,28 @@ class DB:
 
 app = Flask('SimpleUserDatabase')
 api = Api(app)
+ph = PasswordHasher()
 
-app.config['SECRET_KEY'] = 'secret key here'
-auth = HTTPDigestAuth()
+#app.config['SECRET_KEY'] = 'secret key here'
+auth = HTTPBasicAuth()
 db = DB("db.json")
 db.addEntry([{
     "email": "admin@userdb.com", 
     "username": "admin",
     "picture": null,
-    "password": str(hashlib.sha256('admin'.encode('UTF-8')))
+    "password": ph.hash("admin")#hashlib.sha256('admin'.encode('UTF-8')).hexdigest()
 }])
 
-@auth.get_password
-def get_pw(username):
+@auth.verify_password
+def verify_pw(username, password):
     user = db.getUser(username)
+    stored_pw = null
     if user != None:
-        return user.password
-    return None
+        stored_pw = user['password']
+    else:
+        return False
+    #return stored_pw == hashlib.sha256(password.encode('UTF-8')).hexdigest()
+    return ph.verify(stored_pw, password)
 
 from flask_cors import CORS
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -216,7 +222,7 @@ class Schueler(Resource):
             return "user not found", 404
 
 
-api.add_resource(Schueler, '/students')
+api.add_resource(Schueler, '/')
 
 
 if __name__ == '__main__':

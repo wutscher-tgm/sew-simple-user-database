@@ -74,13 +74,18 @@
     },
     methods: {
       getStudents() {
-        const path = /*window.location.hostname+*/'http://python-server:5000/students';
-        axios.get(path)
+        const path = /*window.location.hostname+*/process.env.BACKEND_SERVER;
+
+        axios.get(path, null,{headers: {
+            'Content-Type': 'multipart/form-data'
+          }})
           .then((res) => {
             this.students = res.data;
+            console.log(JSON.stringify)
           })
           .catch((error) => {
             console.error(error);
+            console.log(JSON.stringify(error))
           });
       },
       addStudent: function () {
@@ -89,10 +94,10 @@
         var imagefile = document.querySelector('#addStudentFile');
         data.append('picture', imagefile.files[0]);
         console.log(imagefile.files[0]);
-        const path = `http://python-server:5000/students?email=${this.addStudentInput.email}&username=${this.addStudentInput.name}`;
+        const path = `${process.env.BACKEND_SERVER}?email=${this.addStudentInput.email}&username=${this.addStudentInput.name}`;
         axios.post(path, data, {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'application/x-www-form-urlencoded'
           }
         }).then((res) => {
           console.log(res);
@@ -107,6 +112,15 @@
       }
     },
     created() {
+      axios.interceptors.response.use(response => {
+          return response;
+        }, error => {
+          console.log(`response`, JSON.stringify(error))
+          if (error.response.status === 401) {
+            console.log(`response`, JSON.stringify(error.response))
+          }
+          return error;
+        });
       this.getStudents()
     }
   }

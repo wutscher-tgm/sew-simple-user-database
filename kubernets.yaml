@@ -1,3 +1,4 @@
+#Python Server
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,7 +15,7 @@ spec:
     spec:
       containers:
         - name: sew-sud-server
-          image: rwutscher/sew-sud-server:0.3
+          image: rwutscher/sew-sud-server:1.1
           ports:
             - containerPort: 80
 ---
@@ -33,3 +34,40 @@ spec:
     name: http
   selector:
     app: sew-sud-server
+---
+# VUE Client
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sew-sud-frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sew-sud-frontend
+  template:
+    metadata:
+      labels:
+        app: sew-sud-frontend
+    spec:
+      containers:
+        - name: sew-sud-frontend
+          image: rwutscher/sew-sud-frontend:0.3
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sew-sud-frontend-service
+  labels:
+    app: sew-sud-frontend
+spec:
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    name: http
+  selector:
+    app: sew-sud-frontend

@@ -5,6 +5,6 @@ flask
 flask-restful
 flask-cors
 werkzeug>=0.14
-argon2_cffi
 flask_httpauth
 uwsgi
+argon2_cffi
