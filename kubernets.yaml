@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: sew-sud-server
-          image: rwutscher/sew-sud-server:1.1
+          image: rwutscher/sew-sud-server:2.0
           ports:
             - containerPort: 80
 ---

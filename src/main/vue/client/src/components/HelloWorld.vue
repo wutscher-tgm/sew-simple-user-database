@@ -1,7 +1,9 @@
 <template>
   <div class="hello">
     <h1>Simple User Database</h1>
-
+    <input type="text" v-model="email" name="email">
+    <input type="password" v-model="password" name="password">
+    <input type="button" v-on:click="getStudents()" value="Login">
     <table class="table">
       <thead>
       <tr>
@@ -54,7 +56,9 @@
           name: '',
           email: '',
           picture: ''
-        }
+        },
+        email: '',
+        username: ''
       }
     },
     components: {
@@ -76,17 +80,20 @@
       getStudents() {
         const path = /*window.location.hostname+*/process.env.BACKEND_SERVER;
 
-        axios.get(path, null,{headers: {
+        axios.get(path, {
+          headers: {
             'Content-Type': 'multipart/form-data'
-          }})
-          .then((res) => {
-            this.students = res.data;
-            console.log(JSON.stringify)
-          })
-          .catch((error) => {
-            console.error(error);
-            console.log(JSON.stringify(error))
-          });
+          },
+          auth: {
+              username: this.email,
+              password: this.password
+            }
+        }).then((res) => {
+          this.students = res.data;
+        }).catch((error) => {
+          console.log(error);
+          console.log(error.response)
+        });
       },
       addStudent: function () {
 
@@ -112,15 +119,6 @@
       }
     },
     created() {
-      axios.interceptors.response.use(response => {
-          return response;
-        }, error => {
-          console.log(`response`, JSON.stringify(error))
-          if (error.response.status === 401) {
-            console.log(`response`, JSON.stringify(error.response))
-          }
-          return error;
-        });
       this.getStudents()
     }
   }

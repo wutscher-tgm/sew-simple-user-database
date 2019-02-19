@@ -16,7 +16,7 @@
 GK:
 * [x] mit HTTP-Digest
 * [ ] Vue Client Non Static DB
-* [ ] bestehende UserDB (min SHA256)
+* [x] bestehende UserDB (min SHA256)
 
 EK:
 * [ ] OAUTH (switching: if no PW-Hash in UserDB)
