@@ -23,8 +23,13 @@
         EventBus.$emit('updateStudent', this.index);
       },
       deleteStudent: function (email) {
-        const path = `${process.env.BACKEND_SERVER}?email=${email}`;
-        axios.delete(path).then((res) => {
+        const path = process.env.BACKEND_SERVER;
+        axios.delete(path,{email: email}, {
+          auth:{
+            username: this.$parent.email,
+            password: this.$parent.password
+          }
+        }).then((res) => {
           console.log(res);
           this.getStudents();
         }).catch((error) => {

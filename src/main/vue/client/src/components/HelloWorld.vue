@@ -1,9 +1,17 @@
 <template>
   <div class="hello">
     <h1>Simple User Database</h1>
-    <input type="text" v-model="email" name="email">
-    <input type="password" v-model="password" name="password">
-    <input type="button" v-on:click="getStudents()" value="Login">
+
+    <h2>Login:</h2>
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="email" v-model="email">
+      <input type="password" class="form-control" placeholder="password" v-model="password">
+      <div class="input-group-apppend">
+        <button class="btn btn-outline-accept" v-on:click="getStudents()" id="">Send!</button>
+      </div>
+    </div>
+
+    <h2>Users:</h2>
     <table class="table">
       <thead>
       <tr>
@@ -100,12 +108,19 @@
         var data = new FormData();
         var imagefile = document.querySelector('#addStudentFile');
         data.append('picture', imagefile.files[0]);
-        console.log(imagefile.files[0]);
-        const path = `${process.env.BACKEND_SERVER}?email=${this.addStudentInput.email}&username=${this.addStudentInput.name}`;
+        //console.log(imagefile.files[0]);
+        data.append('email', this.addStudentInput.email);
+        data.append('username', this.addStudentInput.name);
+
+        const path = process.env.BACKEND_SERVER;
         axios.post(path, data, {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
-          }
+          },
+          auth: {
+              username: this.email,
+              password: this.password
+            }
         }).then((res) => {
           console.log(res);
           this.getStudents();
@@ -119,7 +134,7 @@
       }
     },
     created() {
-      this.getStudents()
+      //this.getStudents()
     }
   }
 </script>

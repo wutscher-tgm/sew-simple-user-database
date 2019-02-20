@@ -88,6 +88,32 @@ app = Flask('SimpleUserDatabase')
 api = Api(app)
 ph = PasswordHasher()
 
+auth = HTTPBasicAuth()
+db = DB("db.json")
+db.addEntry([{
+    "email": "admin@userdb.com", 
+    "username": "admin",
+    "picture": null,
+    "password": ph.hash("admin")#hashlib.sha256('admin'.encode('UTF-8')).hexdigest()
+}])
+
+
+@auth.verify_password
+def verify_pw(username, password):
+    print(username)
+    print(password)
+    app.logger.info('Userneme: %s', username)
+    app.logger.info('Password: %s', password)
+    user = db.getUser(username)
+    stored_pw = null
+    app.logger.info('User: %s', user)
+    if user != None:
+        stored_pw = user['password']
+    else:
+        return False
+    #return stored_pw == hashlib.sha256(password.encode('UTF-8')).hexdigest()
+    return ph.verify(stored_pw, password)
+
 #app.config['SECRET_KEY'] = 'secret key here'
 auth = HTTPBasicAuth()
 db = DB("db.json")
@@ -98,16 +124,7 @@ db.addEntry([{
     "password": ph.hash("admin")#hashlib.sha256('admin'.encode('UTF-8')).hexdigest()
 }])
 
-@auth.verify_password
-def verify_pw(username, password):
-    user = db.getUser(username)
-    stored_pw = null
-    if user != None:
-        stored_pw = user['password']
-    else:
-        return False
-    #return stored_pw == hashlib.sha256(password.encode('UTF-8')).hexdigest()
-    return ph.verify(stored_pw, password)
+
 
 from flask_cors import CORS
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -154,8 +171,11 @@ class Schueler(Resource):
         pictureLink = parser.parse_args().pictureLink
         username = parser.parse_args().username
         email = parser.parse_args().email
-        password = parser.parse_args().password
         picture = null
+        
+        password = None
+        if(parser.parse_args().password != None):
+            password = ph.hash(parser.parse_args().password)
 
         # Checking if arguments are valid
         if email == null:
@@ -175,7 +195,7 @@ class Schueler(Resource):
                 {"email": email,
                  "username": username,
                  "picture": picture,
-                 "password": ph.hash(password)#str(hashlib.sha256(password.encode('UTF-8')))
+                 "password": password#str(hashlib.sha256(password.encode('UTF-8')))
                  }
             ]
         )
@@ -226,4 +246,4 @@ api.add_resource(Schueler, '/')
 
 
 if __name__ == '__main__':
-    app.run(debug=true, host='0.0.0.0')
+    app.run(debug=true, host='0.0.0.0', port=80)

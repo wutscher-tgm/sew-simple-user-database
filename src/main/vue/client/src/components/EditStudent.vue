@@ -35,10 +35,17 @@
         var data = new FormData();
         var imagefile = document.getElementById(`${this.index}-picture-input`);
         data.append('picture', imagefile.files[0]);
+        data.append('email', this.student.email);
+        data.append('username', document.getElementById(`${this.index}-username-input`).value);
+
         console.log(data)
-        axios.patch(`${process.env.BACKEND_SERVER}?email=${this.student.email}&username=${document.getElementById(`${this.index}-username-input`).value}`, data,{
+        axios.patch(process.env.BACKEND_SERVER, data,{
           headers: {
             'Content-Type': 'multipart/form-data'
+          },
+          auth:{
+            username: this.$parent.email,
+            password: this.$parent.password
           }
         }).then((err, res) => {
           console.log(res);
@@ -51,8 +58,13 @@
         this.url = URL.createObjectURL(imagefile.files[0]);
       },
       deleteStudent: function (email) {
-        const path = `${process.env.BACKEND_SERVER}?email=${email}`;
-        axios.delete(path).then((res) => {
+        const path = process.env.BACKEND_SERVER;
+        axios.delete(path, {email: email}, {
+          auth:{
+            username: this.$parent.email,
+            password: this.$parent.password
+          }
+        }).then((res) => {
           console.log(res);
           this.getStudents();
         }).catch((error) => {

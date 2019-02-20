@@ -6,6 +6,8 @@ services:
       - "5000:80"
     volumes:
       - ./src/main/python/server:/app
+    environment:
+      - PYTHONUNBUFFERED=FALSE
   vue-client:
     build: src/main/vue/client/
     ports:

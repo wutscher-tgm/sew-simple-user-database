@@ -1,6 +1,6 @@
-FROM tiangolo/uwsgi-nginx-flask:python3.7
-
-COPY requirements.txt /app
+#FROM tiangolo/uwsgi-nginx-flask:python3.7
+FROM python:3.7
+COPY requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt
 COPY . /app
 #COPY /nginx.conf /etc/nginx/conf.d/default.conf
@@ -10,4 +10,4 @@ COPY . /app
 
 
 #EXPOSE 5000
-#CMD ["python", "main.py"]
+CMD ["python", "/app/main.py"]
