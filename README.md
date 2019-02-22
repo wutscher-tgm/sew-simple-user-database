@@ -13,11 +13,15 @@ Die detaillierte [Aufgabenstellung](TASK.md) beschreibt die notwendigen Schritte
 + [Flask](https://flask-restful.readthedocs.io/en/latest/)
 
 ### Deployment
+[sew.projects.rwutscher.com](sew.projects.rwutscher.com)
 Um den Server zu starten muss der folgende Befehl verwendet werden:
 ```
 python src\main\python\server\main.py
 ```
-
+oder docker-compose:
+```
+docker-compose up --build
+```
 ### Verwendung
 
 Um die CRUD funktionen zu verwenden müssen `/students` Requests mit den 
@@ -32,6 +36,7 @@ entsprechenden HTTP Funktionen getätigt werden.
 |username|Der Username des Benutzers|Ja|
 |pictureLink|Die URL zu einem Bild, welches als Profilbild verwendet werden soll|Nein|
 |picture|Ein Bild im base64 Format, welches als Profilbild verwendet werden soll|Nein|
+|password|Das Passwort, dass ein User zum einloggen verwenden kann|Nein|
 
 Es kann entweder ein pictureLink oder ein picture Parameter pro Request verwendet werden.
 #### READ
@@ -53,6 +58,7 @@ Benutzer zurückgegeben.
 |username|Der neue Username des Benutzers|Nein|
 |pictureLink|Die URL zu einem Bild, welches als neues Profilbild verwendet werden soll|Nein|
 |picture|Ein Bild im base64 Format, welches als neues Profilbild verwendet werden soll|Nein|
+|password|Das Passwort, dass ein User zum einloggen verwenden kann|Nein|
 
 Es kann entweder ein pictureLink oder ein picture Parameter pro Request verwendet werden.
 #### DELETE

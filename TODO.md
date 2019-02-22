@@ -21,7 +21,7 @@ GK:
 EK:
 * [ ] OAUTH (switching: if no PW-Hash in UserDB)
 * [ ] Nur admin darf Create, Update, Delete
-* [ ] Lesen w/o PW-Hash für alle angemeldeten User
+* [x] Lesen w/o PW-Hash für alle angemeldeten User
 
 ## Deployment
 
@@ -31,4 +31,4 @@ GK:
 
 EK:
 * [x] global, z.B.: ~~Heroku~~ / __KubernetesCluster__
-* [ ] Zertifikat: HTTPS
+* [x] Zertifikat: HTTPS

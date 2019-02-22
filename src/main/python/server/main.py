@@ -10,6 +10,8 @@ from flask_restful import Resource, Api, reqparse
 import json
 from flask_httpauth import HTTPBasicAuth
 from argon2 import PasswordHasher
+from flask_cors import CORS
+from flask import request, session
 
 true = True
 false = False
@@ -49,7 +51,12 @@ class DB:
         if email != null:
             for element in self.__db:
                 if element['email'] == email:
-                    return element
+                    element2 = {
+                        email: element['email'],
+                        username: element['username'],
+                        picture: element['picture']
+                    }
+                    return element2
         else:
             return self.__db
     
@@ -76,6 +83,11 @@ class DB:
                     return 1
             return None
 
+    def isAdmin(self, email):
+        for element in self.__db:
+                if element['email'] == email:
+                    return element['isAdmin']
+
     def delete(self, email):
         entry = self.get(email=email)
         if entry == None:
@@ -83,20 +95,21 @@ class DB:
         self.__db.remove(entry)
         self.save(self.__db)
 
-
 app = Flask('SimpleUserDatabase')
 api = Api(app)
 ph = PasswordHasher()
 
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 auth = HTTPBasicAuth()
 db = DB("db.json")
+
 db.addEntry([{
     "email": "admin@userdb.com", 
     "username": "admin",
     "picture": null,
     "password": ph.hash("admin")#hashlib.sha256('admin'.encode('UTF-8')).hexdigest()
 }])
-
 
 @auth.verify_password
 def verify_pw(username, password):
@@ -113,24 +126,7 @@ def verify_pw(username, password):
         return False
     #return stored_pw == hashlib.sha256(password.encode('UTF-8')).hexdigest()
     return ph.verify(stored_pw, password)
-
-#app.config['SECRET_KEY'] = 'secret key here'
-auth = HTTPBasicAuth()
-db = DB("db.json")
-db.addEntry([{
-    "email": "admin@userdb.com", 
-    "username": "admin",
-    "picture": null,
-    "password": ph.hash("admin")#hashlib.sha256('admin'.encode('UTF-8')).hexdigest()
-}])
-
-
-
-from flask_cors import CORS
-CORS(app, resources={r"/*": {"origins": "*"}})
-
-
-from flask import request, session  
+  
 class Schueler(Resource):
 
     #authDB = FlaskRealmDigestDB(0)
@@ -145,9 +141,7 @@ class Schueler(Resource):
         #print(request.authorization.username)
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str)
-        parser.add_argument('username', type=str)
         email = parser.parse_args().email
-        username = parser.parse_args().username
 
         if email != null:
             data = db.get(email=email)
@@ -156,7 +150,9 @@ class Schueler(Resource):
         else:
             return db.get()
     
+    @auth.login_required
     def post(self):
+        if()
         
         # Getting arguments from request
         parser = reqparse.RequestParser()
@@ -165,6 +161,7 @@ class Schueler(Resource):
         parser.add_argument('pictureLink', type=str)
         parser.add_argument('password', type=str)
         parser.add_argument('picture', type=werkzeug.datastructures.FileStorage, location='files')
+        parser.add_argument('isAdmin')
 
         # Loading arguments into easily usable variables
         pictureB64 = parser.parse_args().picture
@@ -172,6 +169,7 @@ class Schueler(Resource):
         username = parser.parse_args().username
         email = parser.parse_args().email
         picture = null
+        #isAdmin = parser.parse_args().isAdmin
         
         password = None
         if(parser.parse_args().password != None):
@@ -200,6 +198,7 @@ class Schueler(Resource):
             ]
         )
 
+    @auth.login_required
     def patch(self):
         # Getting arguments from request
         parser = reqparse.RequestParser()
@@ -233,6 +232,7 @@ class Schueler(Resource):
             return "user not found", 404
         return result
 
+    @auth.login_required
     def delete(self):
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str)

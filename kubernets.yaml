@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: sew-sud-server
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: sew-sud-server
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: sew-sud-server
-          image: rwutscher/sew-sud-server:2.1
+          image: rwutscher/sew-sud-server:2.2
           ports:
             - containerPort: 80
 ---
@@ -52,7 +52,7 @@ spec:
     spec:
       containers:
         - name: sew-sud-frontend
-          image: rwutscher/sew-sud-frontend:1.6
+          image: rwutscher/sew-sud-frontend:1.6.1
           ports:
             - containerPort: 80
 ---
