@@ -52,9 +52,10 @@ class DB:
             for element in self.__db:
                 if element['email'] == email:
                     element2 = {
-                        email: element['email'],
-                        username: element['username'],
-                        picture: element['picture']
+                        "email": element['email'],
+                        "username": element['username'],
+                        "picture": element['picture'],
+                        "isAdmin": element['isAdmin']
                     }
                     return element2
         else:
@@ -108,7 +109,8 @@ db.addEntry([{
     "email": "admin@userdb.com", 
     "username": "admin",
     "picture": null,
-    "password": ph.hash("admin")#hashlib.sha256('admin'.encode('UTF-8')).hexdigest()
+    "password": ph.hash("admin"),
+    "isAdmin": True
 }])
 
 @auth.verify_password
@@ -124,21 +126,25 @@ def verify_pw(username, password):
         stored_pw = user['password']
     else:
         return False
-    #return stored_pw == hashlib.sha256(password.encode('UTF-8')).hexdigest()
     return ph.verify(stored_pw, password)
-  
+
+from functools import wraps
+def admin_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not db.isAdmin(auth.username()):
+            return "only for administrators", 502
+        else:
+            return f(*args, **kwargs)
+    return decorated
+
 class Schueler(Resource):
 
-    #authDB = FlaskRealmDigestDB(0)
-    #('MyAuthRealm', DB("db.json"), algorithm="sha256")
-    #authDB.add_user('admin'.encode('utf-8'), 'test'.encode('utf-8'))
     def __init__(self):
         pass
-        #authDB = FlaskRealmDigestDB(self.__db)
     
     @auth.login_required
     def get(self):
-        #print(request.authorization.username)
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str)
         email = parser.parse_args().email
@@ -151,9 +157,8 @@ class Schueler(Resource):
             return db.get()
     
     @auth.login_required
+    @admin_required
     def post(self):
-        if()
-        
         # Getting arguments from request
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str)
@@ -169,7 +174,7 @@ class Schueler(Resource):
         username = parser.parse_args().username
         email = parser.parse_args().email
         picture = null
-        #isAdmin = parser.parse_args().isAdmin
+        isAdmin = parser.parse_args().isAdmin
         
         password = None
         if(parser.parse_args().password != None):
@@ -188,17 +193,26 @@ class Schueler(Resource):
         elif pictureLink != null:
             picture = (base64.b64encode((urllib.request.urlopen(pictureLink)).read())).decode("utf-8")
 
+        if isAdmin == None:
+            isAdmin = False
+        if isAdmin.lower() == "true":
+            isAdmin = True
+        else:
+            isAdmin = False
+        
         return db.addEntry(
             [
                 {"email": email,
                  "username": username,
                  "picture": picture,
-                 "password": password#str(hashlib.sha256(password.encode('UTF-8')))
+                 "password": password,
+                 "isAdmin": isAdmin
                  }
             ]
         )
 
     @auth.login_required
+    @admin_required
     def patch(self):
         # Getting arguments from request
         parser = reqparse.RequestParser()
@@ -233,6 +247,7 @@ class Schueler(Resource):
         return result
 
     @auth.login_required
+    @admin_required
     def delete(self):
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str)
