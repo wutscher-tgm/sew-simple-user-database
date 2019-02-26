@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: test-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+  - hosts:
+    - rwutscher.com
+    - www.rwutscher.com
+    - dev.rwutscher.com
+    - sew.projects.rwutscher.com
+    secretName: letsencrypt-prod
+  rules:
+  - host: rwutscher.com
+    http:
+      paths:
+      - backend:
+          serviceName: nginx-frontend-service
+          servicePort: 80
+  - host: www.rwutscher.com
+    http:
+      paths:
+      - backend:
+          serviceName: nginx-frontend-service
+          servicePort: 80
+  - host: dev.rwutscher.com
+    http:
+      paths:
+      - backend:
+          serviceName: nginx-dev-service
+          servicePort: 80
+  - host: sew.projects.rwutscher.com
+    http:
+      paths:
+      - path: /
+        backend:
+            serviceName: sew-sud-frontend-service
+            servicePort: 80
+      - path: /students
+        backend:
+            serviceName: sew-sud-server-service
+            servicePort: 80

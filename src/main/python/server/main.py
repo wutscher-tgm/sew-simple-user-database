@@ -241,7 +241,7 @@ class Schueler(Resource):
         elif pictureLink != null:
             picture = (base64.b64encode((urllib.request.urlopen(pictureLink)).read())).decode("utf-8")
 
-        result = db.update(email, username=username, picture=picture, password=ph.hash(password))#str(hashlib.sha256(password.encode('UTF-8')))
+        result = db.update(email, username=username, picture=picture, password=ph.hash(password))
         if result == None:
             return "user not found", 404
         return result

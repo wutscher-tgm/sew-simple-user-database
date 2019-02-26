@@ -12,8 +12,7 @@ Die detaillierte [Aufgabenstellung](TASK.md) beschreibt die notwendigen Schritte
 + [PyTestFlask](https://pytest-flask.readthedocs.io/en/latest/)
 + [Flask](https://flask-restful.readthedocs.io/en/latest/)
 
-### Deployment
-[sew.projects.rwutscher.com](sew.projects.rwutscher.com)
+### Deployment Local
 Um den Server zu starten muss der folgende Befehl verwendet werden:
 ```
 python src\main\python\server\main.py
@@ -22,6 +21,11 @@ oder docker-compose:
 ```
 docker-compose up --build
 ```
+
+### Deployment Global
+[sew.projects.rwutscher.com](sew.projects.rwutscher.com)
+Um dass Projekt global zu deployen wurde ein Kubernetes Cluster verwendet. 
+
 ### Verwendung
 
 Um die CRUD funktionen zu verwenden müssen `/students` Requests mit den 
