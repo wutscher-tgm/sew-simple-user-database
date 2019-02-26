@@ -24,7 +24,7 @@ docker-compose up --build
 
 ### Deployment Global
 [sew.projects.rwutscher.com](sew.projects.rwutscher.com)
-Um dass Projekt global zu deployen wurde ein Kubernetes Cluster verwendet. 
+Um dass Projekt global zu deployen wurde ein Kubernetes Cluster verwendet.
 
 ### Verwendung
 
