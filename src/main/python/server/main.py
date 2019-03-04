@@ -70,7 +70,7 @@ class DB:
             return null
     
 
-    def update(self, email, username=null, picture=null, password=null):
+    def update(self, email, username=null, picture=null, password=null, isAdmin=null):
         if email != null:
             for element in self.__db:
                 if element['email'] == email:
@@ -80,6 +80,8 @@ class DB:
                         element['picture'] = picture
                     if password != null:
                         element['password'] = password
+                    if isAdmin != null:
+                        element['isAdmin'] = isAdmin
                     self.save(self.__db)
                     return 1
             return None
@@ -90,11 +92,13 @@ class DB:
                     return element['isAdmin']
 
     def delete(self, email):
-        entry = self.get(email=email)
+        entry = self.getUser(email)
+        print(entry)
         if entry == None:
             return None
         self.__db.remove(entry)
         self.save(self.__db)
+        return True
 
 app = Flask('SimpleUserDatabase')
 api = Api(app)
@@ -195,7 +199,7 @@ class Schueler(Resource):
 
         if isAdmin == None:
             isAdmin = False
-        if isAdmin.lower() == "true":
+        elif isAdmin.lower() == "true":
             isAdmin = True
         else:
             isAdmin = False
@@ -221,6 +225,7 @@ class Schueler(Resource):
         parser.add_argument('password', type=str)
         parser.add_argument('pictureLink', type=str)
         parser.add_argument('picture', type=werkzeug.datastructures.FileStorage, location='files')
+        parser.add_argument('isAdmin')
 
         # Loading arguments into easily usable variables
         pictureB64 = parser.parse_args().picture
@@ -229,7 +234,15 @@ class Schueler(Resource):
         email = parser.parse_args().email
         password = parser.parse_args().password
         picture = null
+        isAdmin = parser.parse_args().isAdmin
 
+        if isAdmin == None:
+            isAdmin = False
+        elif isAdmin.lower() == "true":
+            isAdmin = True
+        else:
+            isAdmin = False
+        
         # Checking if arguments are valid
         if email == null:
             return 'argument "email" is missing', 404
@@ -241,7 +254,10 @@ class Schueler(Resource):
         elif pictureLink != null:
             picture = (base64.b64encode((urllib.request.urlopen(pictureLink)).read())).decode("utf-8")
 
-        result = db.update(email, username=username, picture=picture, password=ph.hash(password))
+        if password != None:
+            ph.hash(password)
+
+        result = db.update(email, username=username, picture=picture, password=password, isAdmin=isAdmin)
         if result == None:
             return "user not found", 404
         return result
@@ -255,6 +271,8 @@ class Schueler(Resource):
         result = db.delete(email)
         if result == None:
             return "user not found", 404
+        else:
+            return "deleted", 200
 
 
 api.add_resource(Schueler, '/')

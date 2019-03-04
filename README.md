@@ -25,6 +25,17 @@ docker-compose up --build
 ### Deployment Global
 [sew.projects.rwutscher.com](sew.projects.rwutscher.com)
 Um dass Projekt global zu deployen wurde ein Kubernetes Cluster verwendet.
+Um dieses zu konfigurieren sind mehrere Teile benötigt:
+
+* Die Ingress Konfiguration
+* Die Deploynemt/Service Konfiguration
+* Die Certbot Konfiguration
+
+#### Ingress Konfiguration
+Die Domain zu managen wird ein *NGINX-Ingress Controller* verwendet. Außerdem Kümmert er sich um die HTTPS Verschlüsselung allen Verkehrs.
+
+#### Deployment/Service Konfiguration
+
 
 ### Verwendung
 

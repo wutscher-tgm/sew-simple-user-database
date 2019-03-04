@@ -15,6 +15,7 @@
 
 <script>
   import { EventBus } from '../event-bus.js'
+  import axios from 'axios'
   export default {
     name: 'Student',
     props: ['student', 'index'],
@@ -22,9 +23,12 @@
       updateStudent: function () {
         EventBus.$emit('updateStudent', this.index);
       },
-      deleteStudent: function (email) {
-        const path = process.env.BACKEND_SERVER;
-        axios.delete(path,{email: email}, {
+      deleteStudent: function () {
+        const path = process.env.BACKEND_SERVER+'&email='+this.student.email;
+        console.log(path)
+        console.log('username: ' + this.$parent.email)
+        console.log('password: ' + this.$parent.password)
+        axios.delete(path, {
           auth:{
             username: this.$parent.email,
             password: this.$parent.password

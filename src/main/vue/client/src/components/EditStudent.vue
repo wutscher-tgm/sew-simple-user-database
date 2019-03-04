@@ -24,7 +24,7 @@
 
   export default {
     name: 'EditStudent',
-    props: ['student', 'index'],
+    props: ['student', 'index', 'parent'],
     data() {
       return {
         url: 'https://mdbootstrap.com/img/Photos/Others/placeholder-avatar.jpg'
@@ -44,8 +44,8 @@
             'Content-Type': 'multipart/form-data'
           },
           auth:{
-            username: this.$parent.email,
-            password: this.$parent.password
+            username: this.parent.email,
+            password: this.parent.password
           }
         }).then((err, res) => {
           console.log(res);
@@ -61,8 +61,8 @@
         const path = process.env.BACKEND_SERVER;
         axios.delete(path, {email: email}, {
           auth:{
-            username: this.$parent.email,
-            password: this.$parent.password
+            username: this.parent.email,
+            password: this.parent.password
           }
         }).then((res) => {
           console.log(res);

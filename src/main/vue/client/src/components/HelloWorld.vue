@@ -65,8 +65,9 @@
           email: '',
           picture: ''
         },
-        email: '',
-        username: ''
+        email: 'admin@userdb.com',
+        username: '',
+        password: 'admin'
       }
     },
     components: {
@@ -77,7 +78,7 @@
       EventBus.$on('updateStudent', index => {
         var ComponentClass = Vue.extend(EditStudent)
         var instance = new ComponentClass({
-            propsData: { student: this.students[index], index:index }
+            propsData: { student: this.students[index], index:index, parent:this }
         });
         instance.$mount();
         var student = document.getElementById('student-'+index);

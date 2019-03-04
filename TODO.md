@@ -14,8 +14,8 @@
 ## CRUD authentifizieren
 
 GK:
-* [x] mit HTTP-Digest
-* [ ] Vue Client Non Static DB
+* [x] mit HTTP-Basic
+* [x] Vue Client Non Static DB
 * [x] bestehende UserDB (min SHA256)
 
 EK:
