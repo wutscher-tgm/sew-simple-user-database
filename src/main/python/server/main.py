@@ -58,6 +58,7 @@ class DB:
                         "isAdmin": element['isAdmin']
                     }
                     return element2
+            return None
         else:
             return self.__db
     
@@ -147,6 +148,10 @@ class Schueler(Resource):
     def __init__(self):
         pass
     
+    @auth.login_required
+    def put(self):
+        return true, 200
+
     @auth.login_required
     def get(self):
         parser = reqparse.RequestParser()
@@ -268,6 +273,7 @@ class Schueler(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str)
         email = parser.parse_args().email
+        print(email)
         result = db.delete(email)
         if result == None:
             return "user not found", 404
@@ -279,4 +285,4 @@ api.add_resource(Schueler, '/')
 
 
 if __name__ == '__main__':
-    app.run(debug=true, host='0.0.0.0', port=80)
+    app.run(debug=true, host='0.0.0.0', port=5000)

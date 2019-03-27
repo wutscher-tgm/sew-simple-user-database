@@ -1,7 +1,9 @@
 .idea
 .tox
 .coverage
+.vscode
 docs
 testreport.html
 __pycache__
 *egg-info
+venv/

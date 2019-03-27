@@ -18,4 +18,5 @@ services:
       #- /code/node_modules/
     depends_on:
       - python-server
-    
+  tox:
+    build: .
